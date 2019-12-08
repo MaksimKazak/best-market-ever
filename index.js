@@ -5,9 +5,19 @@ const bodyParser = require('body-parser');
 const app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost:27017/node-react-starter`);
+mongoose.connect(
+    process.env.MONGODB_URI || `mongodb://localhost:27017/node-react-starter`,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }
+ );
 
 app.use(bodyParser.json());
+
+app.get('/', function (req, res) {
+    res.send('Hello World!');
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
