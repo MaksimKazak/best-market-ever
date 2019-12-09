@@ -1,17 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const app = express();
 
 mongoose.Promise = global.Promise;
 mongoose.connect(
-  process.env.MONGODB_URI || `mongodb://localhost:27017/node-react-starter`,
+  process.env.MONGODB_URI || `mongodb://localhost:27017/best-market-ever`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }
- );
+);
 
 app.use(bodyParser.json());
 
