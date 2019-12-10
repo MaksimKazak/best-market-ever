@@ -21,7 +21,7 @@ function Header() {
   return (
     <header className="App-header">
       <div className='header-left'>
-        <Typography variant='h4'>Best Market Ever</Typography>
+        <Typography variant='h5'>Best Market Ever</Typography>
         <nav className='header-nav'>
           <NavLink to='/' className='link nav-link header-link' exact activeClassName='link-active'>Main</NavLink>
           <NavLink to='/users' className='link nav-link header-link' activeClassName='link-active'>Users</NavLink>
