@@ -1,8 +1,20 @@
 $blue-color: #1976d2
-$darkest-blue: #282c34
+$darkest-grey: #282c34
+$light-blue: #cfe8fc
 
 @import "Header.sass"
 @import "Link.sass"
+@import "MainPage.sass"
+@import "AppFooter.sass"
 
 .App
   text-align: center
+  background-color: lighten($light-blue, 3%)
+  min-height: 100vh
+  font-weight: 500
+  display: flex
+  flex-direction: column
+
+.main-container
+  margin-bottom: 36px
+  margin-top: 36px
