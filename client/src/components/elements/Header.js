@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Typography from '@material-ui/core/Typography';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function Header() {
 
@@ -11,9 +11,9 @@ function Header() {
     profileBlock = <div className='header-profile'>Profile</div>; /* to be changed */
   } else {
     profileBlock = (
-      <nav className='header-profile'>
-        <Link to='/authentication' className='header-link'>Sign in</Link>
-        <Link to='/registration' className='header-link'>Sign up</Link>
+      <nav className='header-profile header-nav'>
+        <NavLink to='/authentication' className='link nav-link header-link' activeClassName='link-active'>Sign in</NavLink>
+        <NavLink to='/registration' className='link nav-link header-link' activeClassName='link-active'>Sign up</NavLink>
       </nav>
     );
   }
@@ -23,10 +23,10 @@ function Header() {
       <div className='header-left'>
         <Typography variant='h4'>Best Market Ever</Typography>
         <nav className='header-nav'>
-          <Link to='/' className='header-link'>Main</Link>
-          <Link to='/users' className='header-link'>Users</Link>
-          <Link to='/operations' className='header-link'>Operations</Link>
-          <Link to='/operations/archive' className='header-link'>Archive</Link>
+          <NavLink to='/' className='link nav-link header-link' exact activeClassName='link-active'>Main</NavLink>
+          <NavLink to='/users' className='link nav-link header-link' activeClassName='link-active'>Users</NavLink>
+          <NavLink to='/operations' className='link nav-link header-link' exact activeClassName='link-active'>Operations</NavLink>
+          <NavLink to='/operations/archive' className='link nav-link header-link' activeClassName='link-active'>Archive</NavLink>
         </nav>
       </div>
       { profileBlock }
