@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 function Registration() {
   return (
     <div>
-      <Typography variant='h4' className='registration-header'>Registration</Typography>
+      <Typography variant='h5' className='registration-header'>Registration</Typography>
       <Box className='registration-box'>
         <TextField className='registration-input' label='username'/>
         <TextField className='registration-input' label='email'/>
