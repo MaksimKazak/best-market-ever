@@ -4,6 +4,7 @@ import { BrowserRouter as Route, Switch, useRouteMatch, NavLink } from 'react-ro
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
+import Box from '@material-ui/core/Box';
 
 import Archive from './Archive';
 
@@ -14,20 +15,22 @@ function Operations() {
     <div>
       <AppBar position="static">
         <Tabs>
-          <NavLink to='/operations'>
+          <NavLink to='/operations' className='tab' exact activeClassName='tab-active'>
             <Tab label="Operations" />
           </NavLink>
-          <NavLink to='/operations/archive'>
+          <NavLink to='/operations/archive' className='tab' activeClassName='tab-active'>
             <Tab label="Archive" />
           </NavLink>
         </Tabs>
       </AppBar>
-      <Switch>
-        <Route exact path={path}/>
-        <Route path={`${path}/archive`}>
-          <Archive />
-        </Route>
-      </Switch>
+      <Box className='box'>
+        <Switch>
+          <Route exact path={path}>Operations</Route>
+          <Route path={`${path}/archive`}>
+            <Archive />
+          </Route>
+        </Switch>
+      </Box>
     </div>
   );
 }
