@@ -25,8 +25,7 @@ function Header() {
         <nav className='header-nav'>
           <NavLink to='/' className='link nav-link header-link' exact activeClassName='link-active'>Main</NavLink>
           <NavLink to='/users' className='link nav-link header-link' activeClassName='link-active'>Users</NavLink>
-          <NavLink to='/operations' className='link nav-link header-link' exact activeClassName='link-active'>Operations</NavLink>
-          <NavLink to='/operations/archive' className='link nav-link header-link' activeClassName='link-active'>Archive</NavLink>
+          <NavLink to='/operations' className='link nav-link header-link' activeClassName='link-active'>Operations</NavLink>
         </nav>
       </div>
       { profileBlock }
