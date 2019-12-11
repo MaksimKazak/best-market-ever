@@ -1,5 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Route, Switch, useRouteMatch } from 'react-router-dom';
+import { BrowserRouter as Route, Switch, useRouteMatch, NavLink } from 'react-router-dom';
+
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import AppBar from '@material-ui/core/AppBar';
 
 import Archive from './Archive';
 
@@ -8,7 +12,16 @@ function Operations() {
 
   return (
     <div>
-      Operations
+      <AppBar position="static">
+        <Tabs>
+          <NavLink to='/operations'>
+            <Tab label="Operations" />
+          </NavLink>
+          <NavLink to='/operations/archive'>
+            <Tab label="Archive" />
+          </NavLink>
+        </Tabs>
+      </AppBar>
       <Switch>
         <Route exact path={path}/>
         <Route path={`${path}/archive`}>
