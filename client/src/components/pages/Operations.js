@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 
 import Tabs from '@material-ui/core/Tabs';
