@@ -18,7 +18,7 @@ function Operations() {
              render={
                ({ location }) => (
                  <Grid container spacing={6}>
-                   <Grid item xs={8}>
+                   <Grid item xs={12} md={8}>
                      <AppBar position="static">
                        <Tabs value={location.pathname} >
                          <Tab label="Operations" value='/operations' component={Link} to='/operations' />
@@ -36,7 +36,7 @@ function Operations() {
                        </Switch>
                      </Box>
                    </Grid>
-                   <Grid item xs={4}>
+                   <Grid item xs={12} md={4}>
                      <RecentActivities />
                    </Grid>
                  </Grid>
