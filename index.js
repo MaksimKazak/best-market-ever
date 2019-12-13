@@ -1,10 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 require('dotenv').config();
 
 require('./models/User');
 require('./models/Product');
+
+require('./config/passport');
 
 const app = express();
 
@@ -18,6 +21,7 @@ mongoose.connect(
 );
 
 app.use(bodyParser.json());
+app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
 require('./routes')(app);
 
