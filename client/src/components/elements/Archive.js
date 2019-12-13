@@ -222,7 +222,7 @@ class Archive extends React.Component {
   render() {
     return (
       <Table columns={columns}
-             rows={operations}
+             rows={this.operations}
              page={this.state.page}
              rowsPerPage={this.state.rowsPerPage}
              handleChangePage={this.handleChangePage}

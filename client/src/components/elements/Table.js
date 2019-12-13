@@ -9,7 +9,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 
 class Table extends React.PureComponent {
   render() {
-    let {columns, rows, page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, rowsPerPageOptions = [10, 25, 100] } = this.props;
+    let {columns = [], rows = [], page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, rowsPerPageOptions = [10, 25, 100] } = this.props;
 
     return (
       <Fragment>
