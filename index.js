@@ -23,7 +23,7 @@ mongoose.connect(
 app.use(bodyParser.json());
 app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
-require('./routes')(app);
+app.use(require('./routes'));
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
