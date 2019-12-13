@@ -6,4 +6,4 @@ const productSchema = new Schema({
   price: Number
 });
 
-mongoose.model('User', productSchema);
+mongoose.model('Product', productSchema);

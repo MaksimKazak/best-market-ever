@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
+require('./models/User');
+require('./models/Product');
+
 const app = express();
 
 mongoose.Promise = global.Promise;
@@ -15,6 +18,8 @@ mongoose.connect(
 );
 
 app.use(bodyParser.json());
+
+require('./routes')(app);
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
