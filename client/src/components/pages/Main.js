@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
+import Box from '@material-ui/core/Box';
 
 function Main() {
 
@@ -8,7 +9,7 @@ function Main() {
   let products = ['wood', 'iron', 'oil'];
 
   return (
-    <div className='main-page'>
+    <Box className='box main-page'>
       <p>
         This application allows you to do one of the most important things - buy imaginary wood, iron and oil.
       </p>
@@ -25,7 +26,7 @@ function Main() {
             <Link to='/operations' className='link'>demo</Link>.
           </p>
       }
-    </div>
+    </Box>
   );
 }
 
