@@ -84,6 +84,7 @@ router.get('/current', auth.required, (req, res, next) => {
 
 //GET users collection
 router.get('/', async (req, res) => {
+  return res.send('kek');
   let users = await User.find();
   return res.status(200).send(users);
 });

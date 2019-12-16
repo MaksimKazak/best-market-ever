@@ -1,4 +1,5 @@
 import React from 'react';
+import UserApi from '../../api/User'
 
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
@@ -20,9 +21,15 @@ class Registration extends React.Component {
     });
   };
 
-  signUpHandler(event) {
+  signUpHandler = async (event) => {
     event.preventDefault();
-  }
+    let res = await UserApi.register({
+      username: this.state.username,
+      email: this.state.email,
+      password: this.state.password
+    });
+    console.log(res);
+  };
 
   render() {
     return (
