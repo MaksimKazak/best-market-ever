@@ -64,7 +64,7 @@ router.post('/login', auth.optional, (req, res, next) => {
       return res.json({ user: user.toAuthJSON() });
     }
 
-    return res.send(401);
+    return res.sendStatus(401);
   })(req, res, next);
 });
 

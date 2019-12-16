@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cors = require('cors');
 require('dotenv').config();
 
 require('./models/User');
@@ -23,6 +24,7 @@ mongoose.connect(
 app.use(bodyParser.json());
 app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
+app.use(cors()); // TODO: Fix route /api/user/login with proxy and remove cors
 app.use(require('./routes'));
 
 app.get('/', function (req, res) {
