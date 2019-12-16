@@ -82,4 +82,22 @@ router.get('/current', auth.required, (req, res, next) => {
     });
 });
 
+//GET users collection
+router.get('/', async (req, res) => {
+  let users = await User.find();
+  return res.status(200).send(users);
+});
+
+//PUT update user by id
+router.put('/:id', async (req, res) => {
+  const {id} = req.params;
+
+  let user = await User.findByIdAndUpdate(id, req.body);
+
+  return res.status(202).send({
+    error: false,
+    user
+  });
+});
+
 module.exports = router;
