@@ -1,5 +1,6 @@
 import React from 'react';
 import UserApi from '../../api/User'
+import { Redirect } from "react-router-dom";
 
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
@@ -10,7 +11,8 @@ class Registration extends React.Component {
   state = {
     username: '',
     email: '',
-    password: ''
+    password: '',
+    redirect: false
   };
 
   inputChangeHandler = (event) => {
@@ -28,10 +30,18 @@ class Registration extends React.Component {
       email: this.state.email,
       password: this.state.password
     });
-    console.log(res);
+    this.setState({
+      redirect: true
+    });
   };
 
   render() {
+    if (this.state.redirect) {
+      return (
+        <Redirect to='/authentication' />
+      );
+    }
+
     return (
       <div>
         <Typography variant='h5' className='registration-header'>Registration</Typography>
