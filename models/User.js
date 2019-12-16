@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const userSchema = new Schema({
-  name: String,
+  username: String,
   email: String,
   balance: Number,
   type: String,

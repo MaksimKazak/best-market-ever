@@ -1,5 +1,5 @@
 import React from 'react';
-import UserApi from '../../api/User'
+import UserApi from '../../api/User';
 import { Redirect } from "react-router-dom";
 
 import Box from '@material-ui/core/Box';

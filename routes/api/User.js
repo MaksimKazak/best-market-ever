@@ -34,9 +34,9 @@ router.post('/', auth.optional, (req, res, next) => {
 
 //POST login route (optional, everyone has access)
 router.post('/login', auth.optional, (req, res, next) => {
-  const { body: { user } } = req;
+  const { body } = req;
 
-  if(!user.email) {
+  if(!body.email) {
     return res.status(422).json({
       errors: {
         email: 'is required',
@@ -44,7 +44,7 @@ router.post('/login', auth.optional, (req, res, next) => {
     });
   }
 
-  if(!user.password) {
+  if(!body.password) {
     return res.status(422).json({
       errors: {
         password: 'is required',
@@ -64,7 +64,7 @@ router.post('/login', auth.optional, (req, res, next) => {
       return res.json({ user: user.toAuthJSON() });
     }
 
-    return status(400).info;
+    return res.status(400).info;
   })(req, res, next);
 });
 
