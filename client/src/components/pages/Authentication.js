@@ -1,6 +1,8 @@
 import React from 'react';
 import UserApi from '../../api/User';
 import { Redirect } from "react-router-dom";
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -28,9 +30,12 @@ class Authentication extends React.Component {
       email: this.state.email,
       password: this.state.password
     });
-    this.setState({
-      redirect: true
-    });
+    Cookies.set('token', res.user.token);
+    axios.defaults.headers.common['Authorization'] = `Token ${res.user.token}`;
+    // Set user to redux store
+    // this.setState({
+    //   redirect: true
+    // });
   };
 
   render() {

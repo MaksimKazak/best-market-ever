@@ -25,7 +25,7 @@ class Registration extends React.Component {
 
   signUpHandler = async (event) => {
     event.preventDefault();
-    let res = await UserApi.register({
+    await UserApi.register({
       username: this.state.username,
       email: this.state.email,
       password: this.state.password
