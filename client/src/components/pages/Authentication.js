@@ -3,6 +3,7 @@ import UserApi from '../../api/User';
 import { Redirect } from "react-router-dom";
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { setUser } from '../../store/actions';
 
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -32,6 +33,7 @@ class Authentication extends React.PureComponent {
     });
     Cookies.set('token', res.user.token);
     axios.defaults.headers.common['Authorization'] = `Token ${res.user.token}`;
+    console.log(this.props);
     // Set user to redux store
     // this.setState({
     //   redirect: true
