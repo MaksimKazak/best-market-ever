@@ -37,7 +37,7 @@ const users = [
   }
 ];
 
-class Users extends React.Component {
+class Users extends React.PureComponent {
   state = {
     page: 0,
     rowsPerPage: 10,

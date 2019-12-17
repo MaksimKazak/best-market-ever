@@ -199,7 +199,7 @@ const operations = [
   }
 ];
 
-class Archive extends React.Component {
+class Archive extends React.PureComponent {
   state = {
     page: 0,
     rowsPerPage: 10,

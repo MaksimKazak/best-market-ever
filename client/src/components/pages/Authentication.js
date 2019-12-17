@@ -9,7 +9,7 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
-class Authentication extends React.Component {
+class Authentication extends React.PureComponent {
   state = {
     email: '',
     password: '',
