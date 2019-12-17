@@ -60,6 +60,7 @@ router.post('/login', auth.optional, (req, res, next) => {
     if (passportUser) {
       const user = passportUser;
       user.token = passportUser.generateJWT();
+      user.save();
 
       return res.json({ user: user.toAuthJSON() });
     }
@@ -85,7 +86,7 @@ router.get('/current', auth.required, (req, res, next) => {
 //GET users collection
 router.get('/', async (req, res) => {
   let users = await User.find();
-  return res.status(200).send(users);
+  return res.status(200).send(users.map(user => user.toJSON()));
 });
 
 //PUT update user by id
@@ -96,7 +97,7 @@ router.put('/:id', async (req, res) => {
 
   return res.status(202).send({
     error: false,
-    user
+    user: user.toJSON()
   });
 });
 

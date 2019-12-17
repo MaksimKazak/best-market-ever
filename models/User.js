@@ -4,10 +4,22 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const userSchema = new Schema({
-  username: String,
-  email: String,
-  balance: Number,
-  type: String,
+  username: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  balance: {
+    type: Number,
+    default: 0
+  },
+  type: {
+    type: String,
+    default: 'common'
+  },
   hash: String,
   salt: String,
   token: String,
@@ -45,8 +57,23 @@ userSchema.methods.generateJWT = function() {
 userSchema.methods.toAuthJSON = function() {
   return {
     _id: this._id,
+    username: this.username,
     email: this.email,
+    balance: this.balance,
+    type: this.type,
+    operations: this.operations,
     token: this.generateJWT(),
+  };
+};
+
+userSchema.methods.toJSON = function() {
+  return {
+    _id: this._id,
+    username: this.username,
+    email: this.email,
+    balance: this.balance,
+    type: this.type,
+    operations: this.operations,
   };
 };
 
