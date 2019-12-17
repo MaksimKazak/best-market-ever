@@ -8,7 +8,7 @@ const User = mongoose.model('User');
 router.post('/', auth.optional, (req, res, next) => {
   const { body } = req;
 
-  if(!body.email) {
+  if (!body.email) {
     return res.status(422).json({
       errors: {
         email: 'is required',
@@ -16,7 +16,7 @@ router.post('/', auth.optional, (req, res, next) => {
     });
   }
 
-  if(!body.password) {
+  if (!body.password) {
     return res.status(422).json({
       errors: {
         password: 'is required',
@@ -36,7 +36,7 @@ router.post('/', auth.optional, (req, res, next) => {
 router.post('/login', auth.optional, (req, res, next) => {
   const { body } = req;
 
-  if(!body.email) {
+  if (!body.email) {
     return res.status(422).json({
       errors: {
         email: 'is required',
@@ -44,7 +44,7 @@ router.post('/login', auth.optional, (req, res, next) => {
     });
   }
 
-  if(!body.password) {
+  if (!body.password) {
     return res.status(422).json({
       errors: {
         password: 'is required',
