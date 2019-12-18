@@ -43,6 +43,6 @@ function ConnectedHeader({ user }) {
   );
 }
 
-const Header = connect(mapStateToProps)(ConnectedHeader);
+const Header = React.memo(connect(mapStateToProps)(ConnectedHeader));
 
 export default Header;
