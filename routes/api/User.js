@@ -79,7 +79,7 @@ router.get('/current', auth.required, (req, res, next) => {
         return res.sendStatus(400);
       }
 
-      return res.json({ user: user.toAuthJSON() });
+      return res.json({ user: user.toJSON() });
     });
 });
 
