@@ -1,11 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 
-function Main() {
-
-  let isAuthenticated = true;
+function Main({ user }) {
   let products = ['wood', 'iron', 'oil'];
 
   return (
@@ -14,7 +13,7 @@ function Main() {
         This application allows you to do one of the most important things - buy imaginary wood, iron and oil.
       </p>
       {
-        isAuthenticated ?
+        user ?
           <p>
             It's time to buy some { products[Math.floor(Math.random()*products.length)] }!
           </p>
@@ -30,4 +29,8 @@ function Main() {
   );
 }
 
-export default React.memo(Main);
+const mapStateToProps = state => ({
+  user: state
+});
+
+export default React.memo(connect(mapStateToProps)(Main));

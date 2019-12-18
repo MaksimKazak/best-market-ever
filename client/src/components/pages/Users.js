@@ -1,8 +1,11 @@
 import React from 'react';
+import { connect } from "react-redux";
+import { withRouter } from 'react-router-dom';
 
 import Table from '../elements/Table';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
+
 const columns = [
   {
     id: 'id',
@@ -38,6 +41,13 @@ const users = [
 ];
 
 class Users extends React.PureComponent {
+  constructor(...args) {
+    super(...args);
+    if (!this.props.user || this.props.user.type !== 'admin') {
+      this.props.history.goBack();
+    }
+  }
+
   state = {
     page: 0,
     rowsPerPage: 10,
@@ -75,4 +85,8 @@ class Users extends React.PureComponent {
   }
 }
 
-export default Users;
+const mapStateToProps = state => ({
+  user: state
+});
+
+export default withRouter(connect(mapStateToProps)(Users));
