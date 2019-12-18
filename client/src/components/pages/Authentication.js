@@ -1,16 +1,17 @@
-import React from 'react';
-import UserApi from '../../api/User';
-import { Redirect } from "react-router-dom";
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { setUser } from '../../store/actions';
-
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import { Redirect } from "react-router-dom";
 
-class Authentication extends React.PureComponent {
+import React from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { connect } from 'react-redux';
+import { actions } from '../../store/userSlice';
+import UserApi from '../../api/User';
+
+class ConnectedAuthentication extends React.PureComponent {
   state = {
     email: '',
     password: '',
@@ -31,13 +32,15 @@ class Authentication extends React.PureComponent {
       email: this.state.email,
       password: this.state.password
     });
-    Cookies.set('token', res.user.token);
-    axios.defaults.headers.common['Authorization'] = `Token ${res.user.token}`;
-    console.log(this.props);
-    // Set user to redux store
-    // this.setState({
-    //   redirect: true
-    // });
+    let { token, ...user } = res.user;
+
+    Cookies.set('token', token);
+    axios.defaults.headers.common['Authorization'] = `Token ${token}`;
+
+    this.props.dispatch(actions.setUser(user));
+    this.setState({
+      redirect: true
+    });
   };
 
   render() {
@@ -72,5 +75,7 @@ class Authentication extends React.PureComponent {
     );
   }
 }
+
+const Authentication = connect()(ConnectedAuthentication);
 
 export default Authentication;

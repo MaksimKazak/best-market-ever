@@ -1,9 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
 import { NavLink } from 'react-router-dom';
 
-function Header() {
+const mapStateToProps = state => ({
+  user: state
+});
+
+function ConnectedHeader({ user }) {
 
   let profileBlock;
   let isAuthenticated = false /* check for authenticated user */;
@@ -32,5 +37,7 @@ function Header() {
     </header>
   );
 }
+
+const Header = connect(mapStateToProps)(ConnectedHeader);
 
 export default Header;
