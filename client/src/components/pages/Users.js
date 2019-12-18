@@ -59,7 +59,7 @@ class Users extends React.PureComponent {
 
   render() {
     return (
-      <Box class='box'>
+      <Box className='box'>
         <Typography variant='h4' className='text-left space-bottom-middle'>
           Users
         </Typography>
