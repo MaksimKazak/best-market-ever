@@ -1,6 +1,7 @@
 import React from 'react';
 import UserApi from '../../api/User';
 import { Redirect } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
@@ -34,7 +35,7 @@ class Registration extends React.PureComponent {
         redirect: true
       });
     }).catch(err => {
-      console.log(err.response);
+      toast.error(err.response.data.message);
     });
   };
 
