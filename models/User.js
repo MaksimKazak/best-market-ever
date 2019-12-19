@@ -58,7 +58,7 @@ userSchema.methods.generateJWT = function() {
 
 userSchema.methods.toAuthJSON = function() {
   return {
-    _id: this._id,
+    id: this._id,
     username: this.username,
     email: this.email,
     balance: this.balance,
@@ -70,7 +70,7 @@ userSchema.methods.toAuthJSON = function() {
 
 userSchema.methods.toJSON = function() {
   return {
-    _id: this._id,
+    id: this._id,
     username: this.username,
     email: this.email,
     balance: this.balance,
