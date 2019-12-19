@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = new Schema({
   username: {
@@ -10,7 +11,8 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   balance: {
     type: Number,
@@ -76,5 +78,7 @@ userSchema.methods.toJSON = function() {
     operations: this.operations,
   };
 };
+
+userSchema.plugin(uniqueValidator);
 
 mongoose.model('User', userSchema);

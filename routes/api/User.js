@@ -29,7 +29,10 @@ router.post('/', auth.optional, (req, res, next) => {
   finalUser.setPassword(body.password);
 
   return finalUser.save()
-    .then(() => res.json({ user: finalUser.toAuthJSON() }));
+    .then(() => res.json({ user: finalUser.toAuthJSON() }))
+    .catch(err => {
+      return res.status(400).send(err);
+    });
 });
 
 //POST login route (optional, everyone has access)

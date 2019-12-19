@@ -25,13 +25,16 @@ class Registration extends React.PureComponent {
 
   signUpHandler = async (event) => {
     event.preventDefault();
-    await UserApi.register({
+    UserApi.register({
       username: this.state.username,
       email: this.state.email,
       password: this.state.password
-    });
-    this.setState({
-      redirect: true
+    }).then(res => {
+      this.setState({
+        redirect: true
+      });
+    }).catch(err => {
+      console.log(err.response);
     });
   };
 
