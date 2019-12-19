@@ -1,18 +1,27 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
+import UserApi from '../../api/User';
+import Cookies from 'js-cookie';
+import { actions } from '../../store/userSlice';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { NavLink } from 'react-router-dom';
 
-function ConnectedHeader({ user }) {
+function ConnectedHeader({ user, dispatch }) {
+
+  const handleLogout = async () => {
+    await UserApi.logout();
+    Cookies.remove('token');
+    dispatch(actions.setUser(null));
+  };
 
   let profileBlock;
   if (user) {
     profileBlock = (
       <div className='header-profile'>
         {user.username}
-        <Button color='primary' className='space-left'>Sign out</Button>
+        <Button color='primary' className='space-left' onClick={handleLogout}>Sign out</Button>
       </div>
     );
   } else {

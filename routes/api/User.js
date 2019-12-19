@@ -83,6 +83,23 @@ router.get('/current', auth.required, (req, res, next) => {
     });
 });
 
+//POST logout route (required, only authenticated users have access)
+router.post('/logout', auth.required, (req, res, next) => {
+  const { payload: { id } } = req;
+
+  return User.findById(id)
+    .then((user) => {
+      if(!user) {
+        return res.sendStatus(400);
+      }
+
+      user.token = null;
+      user.save();
+
+      return res.json({ user: user.toJSON() });
+    });
+});
+
 //GET users collection
 router.get('/', async (req, res) => {
   let users = await User.find();
