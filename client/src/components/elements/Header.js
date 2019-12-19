@@ -20,7 +20,7 @@ function ConnectedHeader({ user, dispatch }) {
   if (user) {
     profileBlock = (
       <div className='header-profile'>
-        {user.username}
+        {user.username + ' ' + user.balance.toFixed(2) + ' $'}
         <Button color='primary' className='space-left' onClick={handleLogout}>Sign out</Button>
       </div>
     );
