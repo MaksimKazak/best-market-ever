@@ -79,6 +79,6 @@ userSchema.methods.toJSON = function() {
   };
 };
 
-userSchema.plugin(uniqueValidator);
+userSchema.plugin(uniqueValidator, { message: '{PATH} already being used.' });
 
 mongoose.model('User', userSchema);
