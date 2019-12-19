@@ -1,16 +1,14 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { Redirect, withRouter } from 'react-router-dom';
+import UserApi from '../../api/User';
+import { toast } from 'react-toastify';
 
 import Table from '../elements/Table';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 
 const columns = [
-  {
-    id: 'id',
-    label: '#'
-  },
   {
     id: 'username',
     label: 'Username'
@@ -25,26 +23,12 @@ const columns = [
     format: value => `${value.toFixed(2)} $`
   }
 ];
-const users = [
-  {
-    id: 1,
-    name: 'Kek',
-    email: 'kek@gmail.com',
-    balance: 56
-  },
-  {
-    id: 2,
-    name: 'Lol',
-    email: 'lol@gmail.com',
-    balance: 500
-  }
-];
 
 class Users extends React.PureComponent {
   state = {
     page: 0,
     rowsPerPage: 10,
-    users
+    users: []
   };
 
   handleChangePage = (event, newPage) => {
@@ -59,6 +43,18 @@ class Users extends React.PureComponent {
       page: 0
     });
   };
+
+  componentDidMount() {
+    UserApi.list()
+      .then(users => {
+        this.setState({
+          users
+        });
+      })
+      .catch(err => {
+        toast.error(err.response.data.message);
+      });
+  }
 
   render() {
     if (!this.props.user || this.props.user.type !== 'admin') {

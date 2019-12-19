@@ -20,6 +20,11 @@ class User {
     let res = await axios.get( 'http://localhost:5000/api/user/current', params); // TODO: remove absolute path and fix /api/user/* POST request with proxy
     return res.data || [];
   }
+
+  static async list(params) {
+    let res = await axios.get( '/api/user', params);
+    return res.data || [];
+  }
 }
 
 export default User;
