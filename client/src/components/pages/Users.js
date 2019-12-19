@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 
 import Table from '../elements/Table';
 import Box from '@material-ui/core/Box';
@@ -12,8 +12,8 @@ const columns = [
     label: '#'
   },
   {
-    id: 'name',
-    label: 'Name'
+    id: 'username',
+    label: 'Username'
   },
   {
     id: 'email',
@@ -41,13 +41,6 @@ const users = [
 ];
 
 class Users extends React.PureComponent {
-  constructor(...args) {
-    super(...args);
-    if (!this.props.user || this.props.user.type !== 'admin') {
-      this.props.history.goBack();
-    }
-  }
-
   state = {
     page: 0,
     rowsPerPage: 10,
@@ -68,6 +61,10 @@ class Users extends React.PureComponent {
   };
 
   render() {
+    if (!this.props.user || this.props.user.type !== 'admin') {
+      return <Redirect to='/' />
+    }
+
     return (
       <Box className='box'>
         <Typography variant='h4' className='text-left space-bottom-middle'>
