@@ -11,9 +11,11 @@ import Profit from './Profit'
 function Operations() {
   let [products, setProducts] = useState([]);
 
-  useEffect(async () => {
-    let data = await ProductApi.list();
-    setProducts(data);
+  useEffect(() => {
+    ProductApi.list()
+      .then(data => {
+        setProducts(data);
+      });
   }, []);
 
   return (
@@ -21,7 +23,7 @@ function Operations() {
       <Grid container spacing={6} justify='center' className='space-bottom'>
         {
           products.map(product => (
-            <Product product={product} />
+            <Product product={product} key={product.resource} />
           ))
         }
       </Grid>
