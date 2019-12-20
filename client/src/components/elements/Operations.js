@@ -22,7 +22,7 @@ function Operations() {
       <Grid container spacing={6} justify='center' className='space-bottom'>
         {
           products.map(product => (
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4} key={product.resource}>
               <Paper className='box box-small-spacing'>
                 <Typography variant='h5' className='space-bottom'>{product.resource}</Typography>
                 <Typography className='space-bottom'>Price: {product.price.toFixed(2)}$</Typography>
