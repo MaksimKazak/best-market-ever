@@ -29,14 +29,16 @@ class Users extends React.PureComponent {
     page: 0,
     rowsPerPage: 10,
     users: [],
-    count: 0
+    count: 0,
+    isLoading: false
   };
 
   handleChangePage = async (event, newPage) => {
     await Promise.all([
-      this.setState({ page: newPage }),
+      this.setState({ page: newPage, isLoading: true }),
       this.fetchData(newPage)
     ]);
+    this.setState({ isLoading: false });
   };
 
   handleChangeRowsPerPage = async event => {
@@ -44,14 +46,17 @@ class Users extends React.PureComponent {
     await Promise.all([
       this.setState({
         rowsPerPage,
-        page: 0
+        page: 0,
+        isLoading: true
       }),
       this.fetchData(0, rowsPerPage)
     ]);
+    this.setState({ isLoading: false });
   };
 
   componentDidMount = async () => {
-    await this.fetchData();
+    await Promise.all([this.fetchData(), this.setState({ isLoading: true })]);
+    this.setState({ isLoading: false });
   };
 
   fetchData(page, rowsPerPage) {
@@ -85,6 +90,7 @@ class Users extends React.PureComponent {
                page={this.state.page}
                count={this.state.count}
                rowsPerPage={this.state.rowsPerPage}
+               isLoading={this.state.isLoading}
                handleChangePage={this.handleChangePage}
                handleChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
