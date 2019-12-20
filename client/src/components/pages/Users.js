@@ -32,30 +32,34 @@ class Users extends React.PureComponent {
     count: 0
   };
 
-  handleChangePage = (event, newPage) => {
-    this.setState({
-      page: newPage
-    });
+  handleChangePage = async (event, newPage) => {
+    await Promise.all([
+      this.setState({ page: newPage }),
+      this.fetchData(newPage)
+    ]);
   };
 
-  handleChangeRowsPerPage = event => {
-    this.setState({
-      rowsPerPage: +event.target.value,
-      page: 0
-    });
-  };
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  fetchData() {
-    UserApi.list({
-      page: this.state.page,
-      rowsPerPage: this.state.rowsPerPage
-    }).then(data => {
-      console.log(data);
+  handleChangeRowsPerPage = async event => {
+    let rowsPerPage = +event.target.value;
+    await Promise.all([
       this.setState({
+        rowsPerPage,
+        page: 0
+      }),
+      this.fetchData(0, rowsPerPage)
+    ]);
+  };
+
+  componentDidMount = async () => {
+    await this.fetchData();
+  };
+
+  fetchData(page, rowsPerPage) {
+    return UserApi.list({
+      page: page || page === 0 ? page : this.state.page,
+      rowsPerPage: rowsPerPage || this.state.rowsPerPage
+    }).then(data => {
+      return this.setState({
         users: data.users,
         count: data.count
       });

@@ -32,7 +32,7 @@ class Table extends React.PureComponent {
             </TableHead>
             <TableBody>
               {
-                rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
+                rows.map(row => (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {
                       columns.map(column => (
