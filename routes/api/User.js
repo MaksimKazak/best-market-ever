@@ -105,8 +105,20 @@ router.post('/logout', auth.required, (req, res, next) => {
 
 //GET users collection
 router.get('/', async (req, res) => {
-  let users = await User.find();
-  return res.status(200).send(users.map(user => user.toJSON()));
+  let { query: { page, rowsPerPage } } = req;
+  try {
+    let [users, count] = await Promise.all([
+      User.find(null, null, { skip: rowsPerPage * page, limit: +rowsPerPage }),
+      User.count()
+    ]);
+    let responseObj = {
+      users: users.map(user => user.toJSON()),
+      count
+    };
+    return res.status(200).send(responseObj);
+  } catch (err) {
+    throw err;
+  }
 });
 
 //PUT update user by id

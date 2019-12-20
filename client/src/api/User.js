@@ -22,7 +22,7 @@ class User {
   }
 
   static async list(params) {
-    let res = await axios.get( '/api/user', params);
+    let res = await axios.get( '/api/user', { params });
     return res.data || [];
   }
 }

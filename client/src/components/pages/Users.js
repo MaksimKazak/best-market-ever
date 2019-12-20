@@ -28,7 +28,8 @@ class Users extends React.PureComponent {
   state = {
     page: 0,
     rowsPerPage: 10,
-    users: []
+    users: [],
+    count: 0
   };
 
   handleChangePage = (event, newPage) => {
@@ -45,15 +46,24 @@ class Users extends React.PureComponent {
   };
 
   componentDidMount() {
-    UserApi.list()
-      .then(users => {
-        this.setState({
-          users
-        });
-      })
-      .catch(err => {
-        toast.error(err.response.data.message);
+    this.fetchData();
+  }
+
+  fetchData() {
+    UserApi.list({
+      page: this.state.page,
+      rowsPerPage: this.state.rowsPerPage
+    }).then(data => {
+      console.log(data);
+      this.setState({
+        users: data.users,
+        count: data.count
       });
+    }).catch(err => {
+      if (err && err.response) {
+        toast.error(err.response.data.message);
+      }
+    });
   }
 
   render() {
@@ -69,6 +79,7 @@ class Users extends React.PureComponent {
         <Table columns={columns}
                rows={this.state.users}
                page={this.state.page}
+               count={this.state.count}
                rowsPerPage={this.state.rowsPerPage}
                handleChangePage={this.handleChangePage}
                handleChangeRowsPerPage={this.handleChangeRowsPerPage}

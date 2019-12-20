@@ -9,11 +9,11 @@ import TablePagination from "@material-ui/core/TablePagination";
 
 class Table extends React.PureComponent {
   render() {
-    let {columns = [], rows = [], page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, rowsPerPageOptions = [10, 25, 100] } = this.props;
+    let {columns = [], rows = [], page, rowsPerPage, handleChangePage, handleChangeRowsPerPage, rowsPerPageOptions = [10, 25, 100], count = 0, height = null } = this.props;
 
     return (
       <Fragment>
-        <div className='operations-table-wrapper'>
+        <div className='operations-table-wrapper' style={{ maxHeight: height }}>
           <MuiTable stickyHeader>
             <TableHead>
               <TableRow>
@@ -50,7 +50,7 @@ class Table extends React.PureComponent {
         <TablePagination
           rowsPerPageOptions={rowsPerPageOptions}
           component="div"
-          count={rows.length}
+          count={count}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
