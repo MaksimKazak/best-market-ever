@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import ProductApi from '../../api/Product';
 
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -8,30 +10,27 @@ import Divider from '@material-ui/core/Divider'
 import Hidden from '@material-ui/core/Hidden'
 
 function Operations() {
+  let [products, setProducts] = useState([]);
+
+  useEffect(async () => {
+    let data = await ProductApi.list();
+    setProducts(data);
+  }, []);
+
   return (
     <div>
       <Grid container spacing={6} justify='center' className='space-bottom'>
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper className='box box-small-spacing'>
-            <Typography variant='h5' className='space-bottom'>Wood</Typography>
-            <Typography className='space-bottom'>Price: 13.40$</Typography>
-            <Button variant='outlined' color='primary'>Buy</Button>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper className='box box-small-spacing'>
-            <Typography variant='h5' className='space-bottom'>Iron</Typography>
-            <Typography className='space-bottom'>Price: 30.50$</Typography>
-            <Button variant='outlined' color='primary'>Buy</Button>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper className='box box-small-spacing'>
-            <Typography variant='h5' className='space-bottom'>Oil</Typography>
-            <Typography className='space-bottom'>Price: 28.00$</Typography>
-            <Button variant='outlined' color='primary'>Buy</Button>
-          </Paper>
-        </Grid>
+        {
+          products.map(product => (
+            <Grid item xs={12} sm={6} md={4}>
+              <Paper className='box box-small-spacing'>
+                <Typography variant='h5' className='space-bottom'>{product.resource}</Typography>
+                <Typography className='space-bottom'>Price: {product.price.toFixed(2)}$</Typography>
+                <Button variant='outlined' color='primary'>Buy</Button>
+              </Paper>
+            </Grid>
+          ))
+        }
       </Grid>
       <Divider variant='middle' />
       <Grid className='space-top-large'>
@@ -70,4 +69,8 @@ function Operations() {
   );
 }
 
-export default Operations;
+const mapStateToProps = state => ({
+  user: state
+});
+
+export default connect(mapStateToProps)(Operations);
