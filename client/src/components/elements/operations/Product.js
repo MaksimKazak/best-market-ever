@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -8,6 +10,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
 import UserApi from '../../../api/User';
+import { actions } from "../../../store/userSlice";
 
 function Product({ product: { resource, price }, dispatch }) {
   let [open, setOpen] = useState(false);
@@ -25,11 +28,11 @@ function Product({ product: { resource, price }, dispatch }) {
     setQuantity(val);
   };
 
-  const buyResource = () => {
-    UserApi.buy({ resource, quantity })
-      .then(data => {
-        console.log(data);
-      });
+  const buyResource = async () => {
+    let user = await UserApi.buy({ resource, quantity });
+    dispatch(actions.setUser(user));
+    toast.success(`${quantity} item of ${resource.toLowerCase()} successfully purchased.`);
+    setOpen(false);
   };
 
   return (
@@ -75,4 +78,4 @@ function Product({ product: { resource, price }, dispatch }) {
   );
 }
 
-export default React.memo(Product);
+export default React.memo(connect()(Product));
