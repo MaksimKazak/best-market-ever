@@ -129,7 +129,7 @@ router.put('/buy', auth.required, async (req, res) => {
   let amount = price * quantity;
 
   if (user.balance < amount) {
-    return res.status(400).send('Insufficient funds.');
+    return res.status(400).send({ message: 'Insufficient funds.' });
   }
 
   user.operations.push({
@@ -159,7 +159,7 @@ router.put('/sell', auth.required, async (req, res) => {
 
   let userResourceQuantity = user.resources[resource];
   if (quantity > userResourceQuantity) {
-    return res.status(400).send('Not enough resources.');
+    return res.status(400).send({ message: 'Not enough resources.' });
   }
 
   user.resources[resource] = userResourceQuantity ? userResourceQuantity - quantity : quantity;

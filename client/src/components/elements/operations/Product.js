@@ -28,11 +28,20 @@ function Product({ product: { resource, price }, dispatch }) {
     setQuantity(val);
   };
 
-  const buyResource = async () => {
-    let user = await UserApi.buy({ resource, quantity });
-    dispatch(actions.setUser(user));
-    toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully purchased.`);
-    setOpen(false);
+  const buyResource = () => {
+    UserApi.buy({ resource, quantity })
+      .then(user => {
+        dispatch(actions.setUser(user));
+        toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully purchased.`);
+      })
+      .catch(err => {
+        if (err.response) {
+          toast.error(err.response.data.message);
+        }
+      })
+      .finally(() => {
+        setOpen(false);
+      });
   };
 
   return (
