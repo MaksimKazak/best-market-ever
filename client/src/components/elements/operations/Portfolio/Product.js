@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import React, {Fragment, useState} from 'react'
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import Slider from "@material-ui/core/Slider";
 import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
 import Modal from "@material-ui/core/Modal";
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import Slider from '@material-ui/core/Slider';
+import Typography from "@material-ui/core/Typography";
+import {connect} from "react-redux";
 
-function Product({ product }) {
+function Product({ user, product }) {
   let [open, setOpen] = useState(false);
   let [amount, setAmount] = useState(1);
 
@@ -25,12 +24,11 @@ function Product({ product }) {
   };
 
   return (
-    <Grid item xs={12} sm={6} md={4} key={product.resource}>
-      <Paper className='box box-small-spacing'>
-        <Typography variant='h5' className='space-bottom'>{product.resource}</Typography>
-        <Typography className='space-bottom'>Price: {product.price.toFixed(2)}$</Typography>
-        <Button variant='outlined' color='primary' onClick={handleOpen}>Buy</Button>
-      </Paper>
+    <Fragment>
+      <Typography className='portfolio-quantity'>
+        {product.resource}: 35
+        <Button color='primary' onClick={handleOpen}>sell</Button>
+      </Typography>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -59,12 +57,16 @@ function Product({ product }) {
               />
             </p>
             <p>{(amount * product.price).toFixed(2) + ' $'}</p>
-            <Button color='primary'>Buy</Button>
+            <Button color='primary'>Sell</Button>
           </div>
         </Fade>
       </Modal>
-    </Grid>
+    </Fragment>
   );
 }
 
-export default React.memo(Product);
+const mapStateToProps = state => ({
+  user: state
+});
+
+export default React.memo(connect(mapStateToProps)(Product));

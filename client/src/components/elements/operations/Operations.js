@@ -5,7 +5,7 @@ import ProductApi from '../../../api/Product';
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import Product from './Product'
-import Portfolio from './Portfolio'
+import Portfolio from './Portfolio/Portfolio'
 import Profit from './Profit'
 
 function Operations() {
@@ -28,7 +28,7 @@ function Operations() {
         }
       </Grid>
       <Divider variant='middle' />
-      <Portfolio />
+      <Portfolio products={products} />
       <Profit />
     </div>
   );

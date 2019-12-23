@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { connect } from 'react-redux';
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
-import Button from "@material-ui/core/Button";
+import Product from './Product';
 
-function Portfolio({ user }) {
+function Portfolio({ user, products }) {
   return (
     <Grid className='space-top-large'>
       <Typography variant='h5' className='text-left'>Portfolio:</Typography>
@@ -17,9 +17,11 @@ function Portfolio({ user }) {
           <div className='divider' />
         </Hidden>
         <Grid item xs={12} sm>
-          <Typography className='portfolio-quantity'>Wood: 35 <Button color='primary'>sell</Button></Typography>
-          <Typography className='portfolio-quantity'>Iron: 234 <Button color='primary'>sell</Button></Typography>
-          <Typography className='portfolio-quantity'>Oil: 4 <Button color='primary'>sell</Button></Typography>
+          {
+            products.map(product => (
+              <Product product={product} />
+            ))
+          }
         </Grid>
         <Hidden smDown>
           <div className='divider' />
