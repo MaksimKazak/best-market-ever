@@ -18,6 +18,10 @@ const userSchema = new Schema({
     type: Number,
     default: 0
   },
+  resources: {
+    type: Schema.Types.Mixed,
+    default: {}
+  }, // Object where keys are resources (wood, iron, oil, etc.) and values are amounts of corresponding resources
   type: {
     type: String,
     default: 'common'
@@ -58,12 +62,7 @@ userSchema.methods.generateJWT = function() {
 
 userSchema.methods.toAuthJSON = function() {
   return {
-    id: this._id,
-    username: this.username,
-    email: this.email,
-    balance: this.balance,
-    type: this.type,
-    operations: this.operations,
+    ...this.toJSON(),
     token: this.generateJWT(),
   };
 };
@@ -74,6 +73,7 @@ userSchema.methods.toJSON = function() {
     username: this.username,
     email: this.email,
     balance: this.balance,
+    resources: this.resources,
     type: this.type,
     operations: this.operations,
   };

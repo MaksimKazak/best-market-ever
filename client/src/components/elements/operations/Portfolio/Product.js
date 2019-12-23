@@ -7,9 +7,11 @@ import Modal from "@material-ui/core/Modal";
 import Typography from "@material-ui/core/Typography";
 import {connect} from "react-redux";
 
-function Product({ user, product }) {
+function Product({ user, product: { resource, price } }) {
   let [open, setOpen] = useState(false);
-  let [amount, setAmount] = useState(1);
+  let [amount, setAmount] = useState(user.resources[resource] || 0);
+
+  let currentQuantity = user.resources[resource] || 0;
 
   const handleOpen = () => {
     setOpen(true);
@@ -26,7 +28,7 @@ function Product({ user, product }) {
   return (
     <Fragment>
       <Typography className='portfolio-quantity'>
-        {product.resource}: 35
+        {resource}: {user.resources[resource] || 0}
         <Button color='primary' onClick={handleOpen}>sell</Button>
       </Typography>
       <Modal
@@ -48,15 +50,15 @@ function Product({ user, product }) {
               <Slider
                 defaultValue={1}
                 aria-labelledby="transition-modal-title"
-                min={1}
-                max={100}
+                min={currentQuantity ? 1 : 0}
+                max={currentQuantity}
                 step={1}
                 valueLabelDisplay="auto"
                 value={amount}
                 onChange={changeAmountHandler}
               />
             </p>
-            <p>{(amount * product.price).toFixed(2) + ' $'}</p>
+            <p>{(amount * price).toFixed(2) + ' $'}</p>
             <Button color='primary'>Sell</Button>
           </div>
         </Fade>

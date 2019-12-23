@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -11,7 +11,7 @@ function Portfolio({ user, products }) {
       <Typography variant='h5' className='text-left'>Portfolio:</Typography>
       <Grid container className='space-top-middle'>
         <Grid item xs={12} sm>
-          <Typography>Balance: {user.balance.toFixed(2)}$</Typography>
+          <Typography>Balance: {user ? user.balance.toFixed(2) : 0}$</Typography>
         </Grid>
         <Hidden smDown>
           <div className='divider' />
@@ -19,7 +19,7 @@ function Portfolio({ user, products }) {
         <Grid item xs={12} sm>
           {
             products.map(product => (
-              <Product product={product} />
+              <Product product={product} key={product.resource} />
             ))
           }
         </Grid>
