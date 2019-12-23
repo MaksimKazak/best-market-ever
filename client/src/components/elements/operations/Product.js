@@ -48,7 +48,7 @@ function Product({ product: { resource, price }, dispatch }) {
     <Grid item xs={12} sm={6} md={4} key={resource}>
       <Paper className='box box-small-spacing'>
         <Typography variant='h5' className='space-bottom'>{resource}</Typography>
-        <Typography className='space-bottom'>Price: {price.toFixed(2)}$</Typography>
+        <Typography className='space-bottom'>Price: {price.toFixed(2)} $</Typography>
         <Button variant='outlined' color='primary' onClick={handleOpen}>Buy</Button>
       </Paper>
       <Modal

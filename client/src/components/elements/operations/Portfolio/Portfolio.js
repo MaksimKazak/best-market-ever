@@ -11,7 +11,7 @@ function Portfolio({ user, products }) {
       <Typography variant='h5' className='text-left'>Portfolio:</Typography>
       <Grid container className='space-top-middle'>
         <Grid item xs={12} sm>
-          <Typography>Balance: {user ? user.balance.toFixed(2) : 0}$</Typography>
+          <Typography>Balance: {user ? user.balance.toFixed(2) : 0} $</Typography>
         </Grid>
         <Hidden smDown>
           <div className='divider' />

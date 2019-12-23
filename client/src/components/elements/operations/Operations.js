@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import Product from './Product'
 import Portfolio from './Portfolio/Portfolio'
-import Profit from './Profit'
+import Profit from './profit/Profit'
 
 function Operations() {
   let [products, setProducts] = useState([]);
@@ -29,7 +29,7 @@ function Operations() {
       </Grid>
       <Divider variant='middle' />
       <Portfolio products={products} />
-      <Profit />
+      <Profit products={products}/>
     </div>
   );
 }
