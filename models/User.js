@@ -29,13 +29,10 @@ const userSchema = new Schema({
   hash: String,
   salt: String,
   token: String,
-  operations: [{
-    quantity: Number,
-    amount: Number,
-    resource: String,
-    type: String,
-    createdAt: Date
-  }]
+  operations: {
+    type: Array,
+    default: []
+  }
 });
 
 userSchema.methods.setPassword = function(password) {

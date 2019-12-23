@@ -25,6 +25,11 @@ class User {
     let res = await axios.get( '/api/user', { params });
     return res.data || [];
   }
+
+  static async buy(params) {
+    let res = await axios.put( 'http://localhost:5000/api/user/buy', params);
+    return res.data || [];
+  }
 }
 
 export default User;

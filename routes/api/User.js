@@ -3,6 +3,7 @@ const passport = require('passport');
 const router = require('express').Router();
 const auth = require('../auth');
 const User = mongoose.model('User');
+const Product = mongoose.model('Product');
 
 //POST new user route (optional, everyone has access)
 router.post('/', auth.optional, (req, res, next) => {
@@ -119,6 +120,35 @@ router.get('/', async (req, res) => {
   } catch (err) {
     throw err;
   }
+});
+
+router.put('/buy', auth.required, async (req, res) => {
+  const { payload: { id }, body: { resource, quantity } } = req;
+
+  const [{ price }, user] = await Promise.all([Product.findOne({ resource }), User.findById(id)]);
+  let amount = price * quantity;
+
+  if (user.balance < amount) {
+    return res.status(400).send('Insufficient funds.');
+  }
+
+  user.operations.push({
+    quantity,
+    amount,
+    resource,
+    type: 'bought',
+    createdAt: new Date()
+  });
+  let userResourceQuantity = user.resources[resource];
+  user.resources[resource] = userResourceQuantity ? userResourceQuantity + quantity : quantity;
+  user.markModified('resources');
+  user.balance -= amount;
+
+  return user.save()
+    .then(() => {
+      return res.status(202).send(user.toJSON())
+    })
+    .catch(err => err);
 });
 
 //PUT update user by id

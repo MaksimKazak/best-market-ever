@@ -7,10 +7,11 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
+import UserApi from '../../../api/User';
 
-function Product({ product }) {
+function Product({ product: { resource, price }, dispatch }) {
   let [open, setOpen] = useState(false);
-  let [amount, setAmount] = useState(1);
+  let [quantity, setQuantity] = useState(1);
 
   const handleOpen = () => {
     setOpen(true);
@@ -20,15 +21,22 @@ function Product({ product }) {
     setOpen(false);
   };
 
-  const changeAmountHandler = (event, val) => {
-    setAmount(val);
+  const changeQuantityHandler = (event, val) => {
+    setQuantity(val);
+  };
+
+  const buyResource = () => {
+    UserApi.buy({ resource, quantity })
+      .then(data => {
+        console.log(data);
+      });
   };
 
   return (
-    <Grid item xs={12} sm={6} md={4} key={product.resource}>
+    <Grid item xs={12} sm={6} md={4} key={resource}>
       <Paper className='box box-small-spacing'>
-        <Typography variant='h5' className='space-bottom'>{product.resource}</Typography>
-        <Typography className='space-bottom'>Price: {product.price.toFixed(2)}$</Typography>
+        <Typography variant='h5' className='space-bottom'>{resource}</Typography>
+        <Typography className='space-bottom'>Price: {price.toFixed(2)}$</Typography>
         <Button variant='outlined' color='primary' onClick={handleOpen}>Buy</Button>
       </Paper>
       <Modal
@@ -45,7 +53,7 @@ function Product({ product }) {
       >
         <Fade in={open}>
           <div className='modal-box'>
-            <h2 id="transition-modal-title">Choose amount</h2>
+            <h2 id="transition-modal-title">Choose quantity</h2>
             <p id="transition-modal-description">
               <Slider
                 defaultValue={1}
@@ -54,12 +62,12 @@ function Product({ product }) {
                 max={100}
                 step={1}
                 valueLabelDisplay="auto"
-                value={amount}
-                onChange={changeAmountHandler}
+                value={quantity}
+                onChange={changeQuantityHandler}
               />
             </p>
-            <p>{(amount * product.price).toFixed(2) + ' $'}</p>
-            <Button color='primary'>Buy</Button>
+            <p>{(quantity * price).toFixed(2) + ' $'}</p>
+            <Button color='primary' onClick={buyResource}>Buy</Button>
           </div>
         </Fade>
       </Modal>
