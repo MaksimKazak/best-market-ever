@@ -151,6 +151,35 @@ router.put('/buy', auth.required, async (req, res) => {
     .catch(err => err);
 });
 
+router.put('/sell', auth.required, async (req, res) => {
+  const { payload: { id }, body: { resource, quantity } } = req;
+
+  const [{ price }, user] = await Promise.all([Product.findOne({ resource }), User.findById(id)]);
+  let amount = price * quantity;
+
+  let userResourceQuantity = user.resources[resource];
+  if (quantity > userResourceQuantity) {
+    return res.status(400).send('Not enough resources.');
+  }
+
+  user.resources[resource] = userResourceQuantity ? userResourceQuantity - quantity : quantity;
+  user.markModified('resources');
+  user.balance += amount;
+  user.operations.push({
+    quantity,
+    amount,
+    resource,
+    type: 'sold',
+    createdAt: new Date()
+  });
+
+  return user.save()
+    .then(() => {
+      return res.status(202).send(user.toJSON())
+    })
+    .catch(err => err);
+});
+
 //PUT update user by id
 router.put('/:id', async (req, res) => {
   const {id} = req.params;

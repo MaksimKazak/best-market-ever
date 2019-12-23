@@ -31,7 +31,7 @@ function Product({ product: { resource, price }, dispatch }) {
   const buyResource = async () => {
     let user = await UserApi.buy({ resource, quantity });
     dispatch(actions.setUser(user));
-    toast.success(`${quantity} item of ${resource.toLowerCase()} successfully purchased.`);
+    toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully purchased.`);
     setOpen(false);
   };
 

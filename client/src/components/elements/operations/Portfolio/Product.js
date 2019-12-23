@@ -6,10 +6,13 @@ import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import Typography from "@material-ui/core/Typography";
 import {connect} from "react-redux";
+import UserApi from "../../../../api/User";
+import {actions} from "../../../../store/userSlice";
+import {toast} from "react-toastify";
 
-function Product({ user, product: { resource, price } }) {
+function Product({ user, product: { resource, price }, dispatch }) {
   let [open, setOpen] = useState(false);
-  let [amount, setAmount] = useState(user.resources[resource] || 0);
+  let [quantity, setQuantity] = useState(user.resources[resource] || 0);
 
   let currentQuantity = user.resources[resource] || 0;
 
@@ -21,8 +24,15 @@ function Product({ user, product: { resource, price } }) {
     setOpen(false);
   };
 
-  const changeAmountHandler = (event, val) => {
-    setAmount(val);
+  const changeQuantityHandler = (event, val) => {
+    setQuantity(val);
+  };
+
+  const sellResource = async () => {
+    let user = await UserApi.sell({ resource, quantity });
+    dispatch(actions.setUser(user));
+    toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully sold.`);
+    setOpen(false);
   };
 
   return (
@@ -45,7 +55,7 @@ function Product({ user, product: { resource, price } }) {
       >
         <Fade in={open}>
           <div className='modal-box'>
-            <h2 id="transition-modal-title">Choose amount</h2>
+            <h2 id="transition-modal-title">Choose quantity</h2>
             <p id="transition-modal-description">
               <Slider
                 defaultValue={1}
@@ -54,12 +64,12 @@ function Product({ user, product: { resource, price } }) {
                 max={currentQuantity}
                 step={1}
                 valueLabelDisplay="auto"
-                value={amount}
-                onChange={changeAmountHandler}
+                value={quantity}
+                onChange={changeQuantityHandler}
               />
             </p>
-            <p>{(amount * price).toFixed(2) + ' $'}</p>
-            <Button color='primary'>Sell</Button>
+            <p>{(quantity * price).toFixed(2) + ' $'}</p>
+            <Button color='primary' onClick={sellResource}>Sell</Button>
           </div>
         </Fade>
       </Modal>
