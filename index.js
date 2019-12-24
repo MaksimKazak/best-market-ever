@@ -5,6 +5,8 @@ const session = require('express-session');
 const cors = require('cors');
 require('dotenv').config();
 
+require('./socket');
+
 require('./models/User');
 require('./models/Product');
 
