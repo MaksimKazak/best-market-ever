@@ -25,21 +25,22 @@ class App extends React.PureComponent {
     isLoading: true
   };
 
-  componentDidMount = async () => {
+  loadUser = () => {
     let token = Cookies.get('token');
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Token ${token}`;
-      try {
-        let { user } = await UserApi.current();
-        this.props.dispatch(userActions.setUser(user));
-      } catch (err) {
-        if (err.response) {
-          toast.error(err.response.data.message);
-        }
-      }
+      return UserApi.current().then(res => res.user);
     }
+    return Promise.resolve();
+  };
+
+  componentDidMount = async () => {
     try {
-      let products = await ProductApi.list();
+      let [user, products] = await Promise.all([
+        this.loadUser(),
+        ProductApi.list()
+      ]);
+      this.props.dispatch(userActions.setUser(user || null));
       this.props.dispatch(productsActions.setProducts(products));
     } catch (err) {
       if (err.response) {

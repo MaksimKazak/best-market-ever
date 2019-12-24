@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import ProductApi from '../../../api/Product';
 
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
