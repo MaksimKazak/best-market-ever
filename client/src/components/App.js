@@ -4,8 +4,10 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { actions } from '../store/userSlice';
+import { actions as userActions } from '../store/userSlice';
+import { actions as productsActions } from '../store/productsSlice';
 import UserApi from "../api/User";
+import ProductApi from "../api/Product";
 
 import Header from './elements/Header';
 import Footer from './elements/Footer';
@@ -16,28 +18,37 @@ import Registration from './pages/Registration';
 import Authentication from './pages/Authentication';
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import { toast } from "react-toastify";
 
 class App extends React.PureComponent {
   state = {
     isLoading: true
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
     let token = Cookies.get('token');
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Token ${token}`;
-      UserApi.current()
-        .then(res => {
-          this.props.dispatch(actions.setUser(res.user));
-          this.setState({ isLoading: false });
-        })
-        .catch(err => {
-          this.setState({ isLoading: false });
-        });
-    } else {
+      try {
+        let { user } = await UserApi.current();
+        this.props.dispatch(userActions.setUser(user));
+      } catch (err) {
+        if (err.response) {
+          toast.error(err.response.data.message);
+        }
+      }
+    }
+    try {
+      let products = await ProductApi.list();
+      this.props.dispatch(productsActions.setProducts(products));
+    } catch (err) {
+      if (err.response) {
+        toast.error(err.response.data.message);
+      }
+    } finally {
       this.setState({ isLoading: false });
     }
-  }
+  };
 
   render() {
     return (

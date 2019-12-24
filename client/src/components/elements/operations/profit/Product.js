@@ -3,11 +3,11 @@ import Typography from "@material-ui/core/Typography";
 import {connect} from "react-redux";
 
 function Product({ user: { operations }, product }) {
- let profit = operations.reduce((acc, { type, amount, resource }) => {
-   if (resource === product.resource) {
-     return type === 'sold' ? acc + amount : acc - amount;
-   }
-   return acc;
+  let profit = operations.reduce((acc, { type, amount, resource }) => {
+    if (resource === product.resource) {
+      return type === 'sold' ? acc + amount : acc - amount;
+    }
+    return acc;
   }, 0);
 
   return (
@@ -16,7 +16,7 @@ function Product({ user: { operations }, product }) {
 }
 
 const mapStateToProps = state => ({
-  user: state
+  user: state.user
 });
 
 export default React.memo(connect(mapStateToProps)(Product));

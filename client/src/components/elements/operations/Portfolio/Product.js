@@ -87,7 +87,7 @@ function Product({ user, product: { resource, price }, dispatch }) {
 }
 
 const mapStateToProps = state => ({
-  user: state
+  user: state.user
 });
 
 export default React.memo(connect(mapStateToProps)(Product));

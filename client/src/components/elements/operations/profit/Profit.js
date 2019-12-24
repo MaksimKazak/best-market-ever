@@ -26,7 +26,8 @@ function Profit({ user: { operations }, products }) {
 }
 
 const mapStateToProps = state => ({
-  user: state
+  user: state.user,
+  products: state.products
 });
 
 export default React.memo(connect(mapStateToProps)(Profit));

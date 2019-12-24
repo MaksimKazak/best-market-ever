@@ -63,7 +63,7 @@ function ConnectedHeader({ user, dispatch }) {
 }
 
 const mapStateToProps = state => ({
-  user: state
+  user: state.user
 });
 
 const Header = React.memo(connect(mapStateToProps)(ConnectedHeader));

@@ -30,9 +30,6 @@ function RecentActivities({ user: { operations } }) {
     }
   }
 
-  console.log(recentOperations);
-
-
   return (
     <Box className='box'>
       <Typography variant='h5' className='text-left space-bottom'>Recent activities</Typography>
@@ -48,7 +45,7 @@ function RecentActivities({ user: { operations } }) {
 }
 
 const mapStateToProps = state => ({
-  user: state
+  user: state.user
 });
 
 export default connect(mapStateToProps)(RecentActivities);
