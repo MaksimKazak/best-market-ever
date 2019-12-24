@@ -48,7 +48,7 @@ function Product({ user, product: { resource, price }, dispatch }) {
     <Fragment>
       <Typography className='portfolio-quantity'>
         {resource}: {user.resources[resource] || 0}
-        <Button color='primary' onClick={handleOpen}>sell</Button>
+        <Button color='primary' onClick={handleOpen} disabled={!user.resources[resource]}>sell</Button>
       </Typography>
       <Modal
         aria-labelledby="transition-modal-title"
