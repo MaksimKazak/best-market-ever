@@ -1,15 +1,8 @@
-const mongoose = require('mongoose');
 const router = require('express').Router();
-const Product = mongoose.model('Product');
+const ProductController = require('../../controllers/ProductController');
+const controller = new ProductController();
 
 //GET products collection
-router.get('/', async (req, res) => {
-  try {
-    let products = await Product.find();
-    return res.status(200).send(products);
-  } catch (err) {
-    throw err;
-  }
-});
+router.get('/', controller.index);
 
 module.exports = router;

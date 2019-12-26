@@ -78,4 +78,4 @@ userSchema.methods.toJSON = function() {
 
 userSchema.plugin(uniqueValidator, { message: '{PATH} already being used.' });
 
-mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);
