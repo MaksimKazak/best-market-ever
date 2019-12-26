@@ -1,6 +1,8 @@
-const User = require('../models/User');
-const Product = require('../models/Product');
 const passport = require('passport');
+const UserRepository = require('../repositories/UserRepository');
+const ProductRepository = require('../repositories/ProductRepository');
+const userRepository = new UserRepository();
+const productRepository = new ProductRepository();
 
 class UserController {
   constructor() {}
@@ -9,8 +11,8 @@ class UserController {
     let { query: { page, rowsPerPage } } = req;
     try {
       let [users, count] = await Promise.all([
-        User.find(null, null, { skip: rowsPerPage * page, limit: +rowsPerPage }),
-        User.count()
+        userRepository.find(null, null, { skip: rowsPerPage * page, limit: +rowsPerPage }),
+        userRepository.count()
       ]);
       let responseObj = {
         users: users.map(user => user.toJSON()),
@@ -25,7 +27,7 @@ class UserController {
   current(req, res) {
     const { payload: { id } } = req;
 
-    return User.findById(id)
+    return userRepository.findById(id)
       .then((user) => {
         if(!user) {
           return res.sendStatus(400);
@@ -54,11 +56,11 @@ class UserController {
       });
     }
 
-    const finalUser = new User(body);
+    const finalUser = userRepository.create(body);
 
     finalUser.setPassword(body.password);
 
-    return finalUser.save()
+    return userRepository.save(finalUser)
       .then(() => res.json({ user: finalUser.toAuthJSON() }))
       .catch(err => {
         return res.status(400).send(err);
@@ -68,7 +70,7 @@ class UserController {
   async buy(req, res) {
     const { payload: { id }, body: { resource, quantity } } = req;
 
-    const [{ price }, user] = await Promise.all([Product.findOne({ resource }), User.findById(id)]);
+    const [{ price }, user] = await Promise.all([productRepository.findOne({ resource }), userRepository.findById(id)]);
     let amount = price * quantity;
 
     if (user.balance < amount) {
@@ -87,7 +89,7 @@ class UserController {
     user.markModified('resources');
     user.balance -= amount;
 
-    return user.save()
+    return userRepository.save(user)
       .then(() => {
         return res.status(202).send(user.toJSON())
       })
@@ -97,7 +99,7 @@ class UserController {
   async sell(req, res) {
     const { payload: { id }, body: { resource, quantity } } = req;
 
-    const [{ price }, user] = await Promise.all([Product.findOne({ resource }), User.findById(id)]);
+    const [{ price }, user] = await Promise.all([productRepository.findOne({ resource }), userRepository.findById(id)]);
     let amount = price * quantity;
 
     let userResourceQuantity = user.resources[resource];
@@ -116,7 +118,7 @@ class UserController {
       createdAt: new Date()
     });
 
-    return user.save()
+    return userRepository.save(user)
       .then(() => {
         return res.status(202).send(user.toJSON())
       })
@@ -162,7 +164,7 @@ class UserController {
   logout(req, res, next) {
     const { payload: { id } } = req;
 
-    return User.findById(id)
+    return userRepository.findById(id)
       .then((user) => {
         if(!user) {
           return res.sendStatus(400);
@@ -175,3 +177,5 @@ class UserController {
       });
   }
 }
+
+module.exports = UserController;

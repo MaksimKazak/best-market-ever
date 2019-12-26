@@ -6,4 +6,6 @@ const productSchema = new Schema({
   price: Number
 });
 
-module.exports = mongoose.model('Product', productSchema);
+let Product = mongoose.model('Product', productSchema);
+
+module.exports = Product;
