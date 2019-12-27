@@ -1,20 +1,19 @@
-import React, {Fragment, useState} from 'react'
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import Slider from "@material-ui/core/Slider";
-import Button from "@material-ui/core/Button";
-import Modal from "@material-ui/core/Modal";
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import {connect} from "react-redux";
-import UserApi from "../../../../api/User";
-import {actions} from "../../../../store/user/userSlice";
-import {toast} from "react-toastify";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import Slider from '@material-ui/core/Slider';
+import UserApi from '../../../../api/User';
+import { actions } from "../../../../store/user/userSlice";
 
-function Product({ user, product: { resource, price }, dispatch }) {
+function Product({ product: { resource, price }, dispatch }) {
   let [open, setOpen] = useState(false);
-  let [quantity, setQuantity] = useState(user.resources[resource] || 0);
-
-  let currentQuantity = user.resources[resource] || 0;
+  let [quantity, setQuantity] = useState(1);
 
   const handleOpen = () => {
     setOpen(true);
@@ -28,11 +27,11 @@ function Product({ user, product: { resource, price }, dispatch }) {
     setQuantity(val);
   };
 
-  const sellResource = () => {
-    UserApi.sell({ resource, quantity })
+  const buyResource = () => {
+    UserApi.buy({ resource, quantity })
       .then(user => {
         dispatch(actions.setUser(user));
-        toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully sold.`);
+        toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully purchased.`);
       })
       .catch(err => {
         if (err.response) {
@@ -45,11 +44,12 @@ function Product({ user, product: { resource, price }, dispatch }) {
   };
 
   return (
-    <Fragment>
-      <Typography className='portfolio-quantity'>
-        {resource}: {user.resources[resource] || 0}
-        <Button color='primary' onClick={handleOpen} disabled={!user.resources[resource]}>sell</Button>
-      </Typography>
+    <Grid item xs={12} sm={6} md={4} key={resource}>
+      <Paper className='box box-small-spacing'>
+        <Typography variant='h5' className='space-bottom'>{resource}</Typography>
+        <Typography className='space-bottom'>Price: {price.toFixed(2)} $</Typography>
+        <Button variant='outlined' color='primary' onClick={handleOpen}>Buy</Button>
+      </Paper>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -69,8 +69,8 @@ function Product({ user, product: { resource, price }, dispatch }) {
               <Slider
                 defaultValue={1}
                 aria-labelledby="transition-modal-title"
-                min={currentQuantity ? 1 : 0}
-                max={currentQuantity}
+                min={1}
+                max={100}
                 step={1}
                 valueLabelDisplay="auto"
                 value={quantity}
@@ -78,16 +78,12 @@ function Product({ user, product: { resource, price }, dispatch }) {
               />
             </p>
             <p>{(quantity * price).toFixed(2) + ' $'}</p>
-            <Button color='primary' onClick={sellResource}>Sell</Button>
+            <Button color='primary' onClick={buyResource}>Buy</Button>
           </div>
         </Fade>
       </Modal>
-    </Fragment>
+    </Grid>
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-});
-
-export default React.memo(connect(mapStateToProps)(Product));
+export default Product;

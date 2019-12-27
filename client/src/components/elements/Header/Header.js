@@ -1,14 +1,13 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import UserApi from '../../api/User';
+import UserApi from '../../../api/User';
 import Cookies from 'js-cookie';
-import { actions } from '../../store/user/userSlice';
+import { actions } from '../../../store/user/userSlice';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { NavLink } from 'react-router-dom';
 
-function ConnectedHeader({ user, dispatch }) {
+function Header({ user, dispatch }) {
 
   const handleLogout = async () => {
     await UserApi.logout();
@@ -61,11 +60,5 @@ function ConnectedHeader({ user, dispatch }) {
     </header>
   );
 }
-
-const mapStateToProps = state => ({
-  user: state.user
-});
-
-const Header = React.memo(connect(mapStateToProps)(ConnectedHeader));
 
 export default Header;

@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 
 import ArchivePanel from '../elements/Archive';
-import OperationsPanel from '../elements/operations/Operations';
+import OperationsPanel from '../elements/operations';
 import RecentActivities from "../elements/RecentActivities";
 
 function Operations() {

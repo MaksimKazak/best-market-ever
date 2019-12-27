@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from "react-redux";
-import { Redirect, withRouter } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import UserApi from '../../api/User';
 import { toast } from 'react-toastify';
 
@@ -99,8 +98,4 @@ class Users extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-});
-
-export default withRouter(connect(mapStateToProps)(Users));
+export default Users;

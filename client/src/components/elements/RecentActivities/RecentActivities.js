@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -44,8 +43,4 @@ function RecentActivities({ user: { operations } }) {
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-});
-
-export default connect(mapStateToProps)(RecentActivities);
+export default RecentActivities;

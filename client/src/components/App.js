@@ -7,11 +7,11 @@ import login from '../store/user/middleware';
 
 import Header from './elements/Header';
 import Footer from './elements/Footer';
-import Main from './pages/Main';
-import Users from './pages/Users';
-import Operations from './pages/Operations';
-import Registration from './pages/Registration';
-import Authentication from './pages/Authentication';
+import Main from './Main';
+import Users from './Users';
+import Operations from './Operations';
+import Registration from './Registration';
+import Authentication from './Authentication';
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 

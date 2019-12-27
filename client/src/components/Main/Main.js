@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
@@ -29,8 +28,4 @@ function Main({ user }) {
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-});
-
-export default React.memo(connect(mapStateToProps)(Main));
+export default Main;

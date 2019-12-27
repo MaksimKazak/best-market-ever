@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Product from "./Product";
@@ -25,9 +24,4 @@ function Profit({ user: { operations }, products }) {
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.user,
-  products: state.products
-});
-
-export default React.memo(connect(mapStateToProps)(Profit));
+export default Profit;

@@ -1,11 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import Product from './Product'
-import Portfolio from './Portfolio/Portfolio'
-import Profit from './profit/Profit'
+import Portfolio from './Portfolio'
+import Profit from './Profit'
 
 function Operations({ products }) {
   return (
@@ -24,9 +23,4 @@ function Operations({ products }) {
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.user,
-  products: state.products
-});
-
-export default connect(mapStateToProps)(Operations);
+export default Operations;

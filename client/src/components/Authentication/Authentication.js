@@ -7,11 +7,10 @@ import { Redirect } from "react-router-dom";
 import React from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { connect } from 'react-redux';
 import { actions } from '../../store/user/userSlice';
 import UserApi from '../../api/User';
 
-class ConnectedAuthentication extends React.PureComponent {
+class Authentication extends React.PureComponent {
   state = {
     email: '',
     password: '',
@@ -75,7 +74,5 @@ class ConnectedAuthentication extends React.PureComponent {
     );
   }
 }
-
-const Authentication = connect()(ConnectedAuthentication);
 
 export default Authentication;

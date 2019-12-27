@@ -1,6 +1,5 @@
 import React from 'react';
 import Typography from "@material-ui/core/Typography";
-import {connect} from "react-redux";
 
 function Product({ user: { operations }, product }) {
   let profit = operations.reduce((acc, { type, amount, resource }) => {
@@ -15,8 +14,4 @@ function Product({ user: { operations }, product }) {
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.user
-});
-
-export default React.memo(connect(mapStateToProps)(Product));
+export default Product;

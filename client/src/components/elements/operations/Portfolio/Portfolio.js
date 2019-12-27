@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
@@ -34,9 +33,4 @@ function Portfolio({ user, products }) {
   );
 }
 
-const mapStateToProps = state => ({
-  user: state.user,
-  products: state.products
-});
-
-export default connect(mapStateToProps)(React.memo(Portfolio));
+export default Portfolio;
