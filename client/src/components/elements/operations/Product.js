@@ -10,7 +10,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
 import UserApi from '../../../api/User';
-import { actions } from "../../../store/userSlice";
+import { actions } from "../../../store/user/userSlice";
 
 function Product({ product: { resource, price }, dispatch }) {
   let [open, setOpen] = useState(false);

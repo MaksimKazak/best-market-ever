@@ -10,4 +10,4 @@ const productsSlice = createSlice({
 const { actions, reducer } = productsSlice;
 
 export { actions, reducer };
-export default productsSlice;
+export default reducer;

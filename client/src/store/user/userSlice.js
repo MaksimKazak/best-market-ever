@@ -7,7 +7,8 @@ const userSlice = createSlice({
     setUser: (state, action) => action.payload
   }
 });
+
 const { actions, reducer } = userSlice;
 
 export { actions, reducer };
-export default userSlice;
+export default reducer;

@@ -7,7 +7,7 @@ import Modal from "@material-ui/core/Modal";
 import Typography from "@material-ui/core/Typography";
 import {connect} from "react-redux";
 import UserApi from "../../../../api/User";
-import {actions} from "../../../../store/userSlice";
+import {actions} from "../../../../store/user/userSlice";
 import {toast} from "react-toastify";
 
 function Product({ user, product: { resource, price }, dispatch }) {
