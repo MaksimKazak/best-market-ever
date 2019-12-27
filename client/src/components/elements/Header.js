@@ -49,7 +49,7 @@ function ConnectedHeader({ user, dispatch }) {
   }
 
   return (
-    <header className="App-header">
+    <header className="app-header">
       <div className='header-left'>
         <Typography variant='h5'>Best Market Ever</Typography>
         <nav className='header-nav'>
