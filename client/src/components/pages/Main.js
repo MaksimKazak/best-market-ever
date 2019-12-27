@@ -30,7 +30,7 @@ function Main({ user }) {
 }
 
 const mapStateToProps = state => ({
-  user: state
+  user: state.user
 });
 
 export default React.memo(connect(mapStateToProps)(Main));

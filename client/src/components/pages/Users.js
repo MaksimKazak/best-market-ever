@@ -100,7 +100,7 @@ class Users extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-  user: state
+  user: state.user
 });
 
 export default withRouter(connect(mapStateToProps)(Users));
