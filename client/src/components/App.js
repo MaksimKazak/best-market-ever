@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import '../assets/styles/App.sass';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -15,48 +15,45 @@ import Authentication from './pages/Authentication';
 import Container from '@material-ui/core/Container';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-class App extends React.PureComponent {
-  state = {
-    isLoading: true
-  };
+function App({ dispatch }) {
+  let [isLoading, setIsLoading] = useState(true);
 
-  componentDidMount = async () => {
-    await Promise.all([
-      this.props.dispatch(loadProducts()),
-      this.props.dispatch(login())
-    ]);
-    this.setState({ isLoading: false });
-  };
+  useEffect(() => {
+    Promise.all([
+      dispatch(loadProducts()),
+      dispatch(login())
+    ]).then(() => {
+      setIsLoading(false);
+    });
+  }, [dispatch]);
 
-  render() {
-    return (
-      <Router>
-        <div className="App">
-          {
-            this.state.isLoading ?
-              <LinearProgress/>
-              :
-              <Fragment>
-                <Header />
-                <Container className='main-container'>
-                  <Switch>
-                    <Route path='/' exact component={Main}/>
-                    <Route path='/users' component={Users}/>
-                    <Route path='/operations' component={Operations}/>
-                    <Route path='/registration' component={Registration}/>
-                    <Route path='/authentication' component={Authentication}/>
-                    <Route>
-                      404 Error
-                    </Route>
-                  </Switch>
-                </Container>
-                <Footer />
-              </Fragment>
-          }
-        </div>
-      </Router>
-    );
-  }
+  return (
+    <Router>
+      <div className="App">
+        {
+          isLoading ?
+            <LinearProgress/>
+            :
+            <Fragment>
+              <Header />
+              <Container className='main-container'>
+                <Switch>
+                  <Route path='/' exact component={Main}/>
+                  <Route path='/users' component={Users}/>
+                  <Route path='/operations' component={Operations}/>
+                  <Route path='/registration' component={Registration}/>
+                  <Route path='/authentication' component={Authentication}/>
+                  <Route>
+                    404 Error
+                  </Route>
+                </Switch>
+              </Container>
+              <Footer />
+            </Fragment>
+        }
+      </div>
+    </Router>
+  );
 }
 
-export default connect()(App);
+export default connect()(React.memo(App));
