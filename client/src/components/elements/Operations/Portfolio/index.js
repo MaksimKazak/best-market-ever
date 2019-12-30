@@ -7,5 +7,4 @@ const mapStateToProps = state => ({
   products: state.products
 });
 
-
 export default connect(mapStateToProps)(React.memo(Portfolio));
