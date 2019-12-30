@@ -1,8 +1,12 @@
 const Operation = require('../models/Operation');
 
-class ProductRepository {
-  all() {
-    return Operation.find();
+class OperationRepository {
+  find(...args) {
+    return Operation.find(...args);
+  }
+
+  count() {
+    return Operation.countDocuments();
   }
 
   findOne(...args) {
@@ -18,4 +22,4 @@ class ProductRepository {
   }
 }
 
-module.exports = ProductRepository;
+module.exports = OperationRepository;
