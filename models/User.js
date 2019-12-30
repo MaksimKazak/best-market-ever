@@ -29,10 +29,10 @@ const userSchema = new Schema({
   hash: String,
   salt: String,
   token: String,
-  operations: {
-    type: Array,
-    default: []
-  }
+  operations: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Operation'
+  }]
 });
 
 userSchema.methods.setPassword = function(password) {

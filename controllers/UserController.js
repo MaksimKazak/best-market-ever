@@ -1,8 +1,10 @@
 const passport = require('passport');
 const UserRepository = require('../repositories/UserRepository');
 const ProductRepository = require('../repositories/ProductRepository');
+const OperationRepository = require('../repositories/OperationRepository');
 const userRepository = new UserRepository();
 const productRepository = new ProductRepository();
+const operationRepository = new OperationRepository();
 
 class UserController {
   constructor() {}
@@ -77,13 +79,16 @@ class UserController {
       return res.status(400).send({ message: 'Insufficient funds.' });
     }
 
-    user.operations.push({
+    let operation = operationRepository.create({
+      user: user._id,
       quantity,
       amount,
       resource,
       type: 'bought',
       createdAt: new Date()
     });
+    operationRepository.save(operation);
+    user.operations.push(operation._id);
     let userResourceQuantity = user.resources[resource];
     user.resources[resource] = userResourceQuantity ? userResourceQuantity + quantity : quantity;
     user.markModified('resources');
@@ -110,13 +115,16 @@ class UserController {
     user.resources[resource] = userResourceQuantity ? userResourceQuantity - quantity : quantity;
     user.markModified('resources');
     user.balance += amount;
-    user.operations.push({
+    let operation = operationRepository.create({
+      user: user._id,
       quantity,
       amount,
       resource,
       type: 'sold',
       createdAt: new Date()
     });
+    operationRepository.save(operation);
+    user.operations.push(operation._id);
 
     return userRepository.save(user)
       .then(() => {
