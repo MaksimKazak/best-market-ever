@@ -3,7 +3,7 @@ import '../assets/styles/App.sass';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import loadProducts from '../store/products/middleware';
-import login from '../store/user/middleware';
+import { login } from '../store/user/middleware';
 
 import Header from './elements/Header';
 import Footer from './elements/Footer';

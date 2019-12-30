@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import UserApi from '../../api/User';
-import { actions } from './userSlice';
+import { actions, initialUser } from './userSlice';
 import { toast } from "react-toastify";
 
 const login = () => (dispatch) => {
@@ -17,4 +17,11 @@ const login = () => (dispatch) => {
   return Promise.resolve();
 };
 
-export default login;
+const logout = () => (dispatch) => {
+  UserApi.logout().then(() => {
+    Cookies.remove('token');
+    dispatch(actions.setUser(initialUser));
+  });
+};
+
+export { login, logout };

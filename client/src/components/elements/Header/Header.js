@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
-import UserApi from '../../../api/User';
-import Cookies from 'js-cookie';
-import { actions } from '../../../store/user/userSlice';
+import { logout } from '../../../store/user/middleware';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -10,13 +8,11 @@ import { NavLink } from 'react-router-dom';
 function Header({ user, dispatch }) {
 
   const handleLogout = async () => {
-    await UserApi.logout();
-    Cookies.remove('token');
-    dispatch(actions.setUser(null));
+    dispatch(logout());
   };
 
   let profileBlock;
-  if (user) {
+  if (!user.isNotAuthenticated) {
     profileBlock = (
       <div className='header-profile'>
         {user.username + ' ' + user.balance.toFixed(2) + ' $'}
@@ -33,7 +29,7 @@ function Header({ user, dispatch }) {
   }
 
   let links;
-  if (user) {
+  if (!user.isNotAuthenticated) {
     links = (
       <NavLink to='/operations' className='link nav-link header-link' activeClassName='link-active'>Operations</NavLink>
     );
