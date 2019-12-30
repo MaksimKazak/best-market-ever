@@ -72,7 +72,10 @@ class UserController {
   async buy(req, res) {
     const { payload: { id }, body: { resource, quantity } } = req;
 
-    const [{ price }, user] = await Promise.all([productRepository.findOne({ resource }), userRepository.findById(id)]);
+    const [{ price }, user] = await Promise.all([
+      productRepository.findOne({ resource }),
+      userRepository.findById(id)
+    ]);
     let amount = price * quantity;
 
     if (user.balance < amount) {
@@ -104,7 +107,10 @@ class UserController {
   async sell(req, res) {
     const { payload: { id }, body: { resource, quantity } } = req;
 
-    const [{ price }, user] = await Promise.all([productRepository.findOne({ resource }), userRepository.findById(id)]);
+    const [{ price }, user] = await Promise.all([
+      productRepository.findOne({ resource }),
+      userRepository.findById(id)
+    ]);
     let amount = price * quantity;
 
     let userResourceQuantity = user.resources[resource];

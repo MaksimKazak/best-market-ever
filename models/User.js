@@ -72,7 +72,7 @@ userSchema.methods.toJSON = function() {
     balance: this.balance,
     resources: this.resources,
     type: this.type,
-    operations: this.operations,
+    operations: [],
   };
 };
 

@@ -17,7 +17,7 @@ const columns = [
   {
     id: 'amount',
     label: 'Amount',
-    format: value => `${value.toFixed(2)} $`
+    format: value => `${(+value).toFixed(2)} $`
   },
   {
     id: 'createdAt',

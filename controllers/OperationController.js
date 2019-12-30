@@ -11,14 +11,15 @@ class OperationController {
   }
 
   async index(req, res) {
-    let { query: { page, rowsPerPage } } = req;
+    const { payload: { id } } = req;
+    const { query: { page, rowsPerPage } } = req;
     try {
       let [operations, count] = await Promise.all([
-        operationRepository.find(null, null, { skip: rowsPerPage * page, limit: +rowsPerPage }),
+        operationRepository.find({ user: id }, null, { skip: rowsPerPage * page, limit: +rowsPerPage }),
         operationRepository.count()
       ]);
       let responseObj = {
-        operations: operations.map(user => user.toJSON()),
+        operations,
         count
       };
       return res.status(200).send(responseObj);
