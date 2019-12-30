@@ -2,6 +2,8 @@ const ProductRepository = require('../repositories/ProductRepository');
 const OperationRepository = require('../repositories/OperationRepository');
 const productRepository = new ProductRepository();
 const operationRepository = new OperationRepository();
+const moment = require('moment');
+const lodash = require('lodash');
 
 class OperationController {
   constructor() {}
@@ -53,28 +55,31 @@ class OperationController {
   }
 
   async recentActivities(req, res) {
-    // let dayEarlier = moment().subtract(1, 'day');
-    // // get operations for 1 day and group them by resource
-    // let recentOperations = _.groupBy(
-    //   operations.filter(operation => moment(operation.createdAt).isAfter(dayEarlier)),
-    //   'resource'
-    // );
-    //
-    // for (let resource in recentOperations) {
-    //   if (recentOperations.hasOwnProperty(resource)) {
-    //     // group grouped by resource operations by type(sold/bought)
-    //     recentOperations[resource] = _.groupBy(
-    //       recentOperations[resource],
-    //       'type'
-    //     );
-    //     // convert grouped arrays of operations into quantities of items
-    //     for (let type in recentOperations[resource]) {
-    //       if (recentOperations[resource].hasOwnProperty(type)) {
-    //         recentOperations[resource][type] = recentOperations[resource][type].reduce((acc, { quantity }) => acc + quantity, 0);
-    //       }
-    //     }
-    //   }
-    // }
+    const { payload: { id } } = req;
+    let operations = await operationRepository.find({ user: id });
+    let dayEarlier = moment().subtract(1, 'day');
+    let recentOperations = _.groupBy(
+      operations.filter(operation => moment(operation.createdAt).isAfter(dayEarlier)),
+      'resource'
+    );
+
+    for (let resource in recentOperations) {
+      if (recentOperations.hasOwnProperty(resource)) {
+        // group grouped by resource operations by type(sold/bought)
+        recentOperations[resource] = _.groupBy(
+          recentOperations[resource],
+          'type'
+        );
+        // convert grouped arrays of operations into quantities of items
+        for (let type in recentOperations[resource]) {
+          if (recentOperations[resource].hasOwnProperty(type)) {
+            recentOperations[resource][type] = recentOperations[resource][type].reduce((acc, { quantity }) => acc + quantity, 0);
+          }
+        }
+      }
+    }
+
+    return res.status(200).send(recentOperations);
   }
 }
 
