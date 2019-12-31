@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 
 import Tabs from '@material-ui/core/Tabs';
@@ -35,36 +35,32 @@ function Operations() {
       <Route path='/operations'
              render={
                ({ location }) => (
-                 <Fragment>
-                   {
-                     profit && recentOperations ?
-                       <Grid container spacing={6}>
-                         <Grid item xs={12} md={8}>
-                           <AppBar position="static">
-                             <Tabs value={location.pathname} >
-                               <Tab label="Operations" value='/operations' component={Link} to='/operations' />
-                               <Tab label="Archive" value='/operations/archive' component={Link} to='/operations/archive'/>
-                             </Tabs>
-                           </AppBar>
-                           <Box className='box'>
-                             <Switch>
-                               <Route exact path='/operations'>
-                                 <OperationsPanel profit={profit} />
-                               </Route>
-                               <Route path='/operations/archive'>
-                                 <ArchivePanel />
-                               </Route>
-                             </Switch>
-                           </Box>
-                         </Grid>
-                         <Grid item xs={12} md={4}>
-                           <RecentActivities recentOperations={recentOperations} />
-                         </Grid>
-                       </Grid>
-                       :
-                       <CircularProgress />
-                   }
-                 </Fragment>
+                 profit && recentOperations ?
+                   <Grid container spacing={6}>
+                     <Grid item xs={12} md={8}>
+                       <AppBar position="static">
+                         <Tabs value={location.pathname} >
+                           <Tab label="Operations" value='/operations' component={Link} to='/operations' />
+                           <Tab label="Archive" value='/operations/archive' component={Link} to='/operations/archive'/>
+                         </Tabs>
+                       </AppBar>
+                       <Box className='box'>
+                         <Switch>
+                           <Route exact path='/operations'>
+                             <OperationsPanel profit={profit} />
+                           </Route>
+                           <Route path='/operations/archive'>
+                             <ArchivePanel />
+                           </Route>
+                         </Switch>
+                       </Box>
+                     </Grid>
+                     <Grid item xs={12} md={4}>
+                       <RecentActivities recentOperations={recentOperations} />
+                     </Grid>
+                   </Grid>
+                   :
+                   <CircularProgress />
                )
              }
       />
