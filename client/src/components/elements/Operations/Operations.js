@@ -6,7 +6,7 @@ import Product from './Product'
 import Portfolio from './Portfolio'
 import Profit from './Profit'
 
-function Operations({ products }) {
+function Operations({ products, profit }) {
   return (
     <div>
       <Grid container spacing={6} justify='center' className='space-bottom'>
@@ -18,7 +18,7 @@ function Operations({ products }) {
       </Grid>
       <Divider variant='middle' />
       <Portfolio />
-      <Profit />
+      <Profit profit={profit} />
     </div>
   );
 }
