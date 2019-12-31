@@ -7,12 +7,12 @@ class Operation {
   }
 
   static async profit(params) {
-    let res = await axios.get( '/api/operation/profit', { params });
+    let res = await axios.get( 'http://localhost:5000/api/operation/profit', { params }); //TODO: fix proxy
     return res.data || [];
   }
 
-  static async recentActivities(params) {
-    let res = await axios.get( '/api/operation/recent-activities', { params });
+  static async recent(params) {
+    let res = await axios.get( 'http://localhost:5000/api/operation/recent', { params }); //TODO: fix proxy
     return res.data || [];
   }
 }

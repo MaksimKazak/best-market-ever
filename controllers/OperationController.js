@@ -3,7 +3,7 @@ const OperationRepository = require('../repositories/OperationRepository');
 const productRepository = new ProductRepository();
 const operationRepository = new OperationRepository();
 const moment = require('moment');
-const lodash = require('lodash');
+const _ = require('lodash');
 
 class OperationController {
   constructor() {}
@@ -39,7 +39,7 @@ class OperationController {
       productRepository.all()
     ]);
     let responseObject = {
-      profit: operations.reduce((acc, { type, amount }) => {
+      general: operations.reduce((acc, { type, amount }) => {
         return type === 'sold' ? acc + amount : acc - amount;
       }, 0)
     };
@@ -54,12 +54,12 @@ class OperationController {
     return res.status(200).send(responseObject);
   }
 
-  async recentActivities(req, res) {
+  async recent(req, res) {
     const { payload: { id } } = req;
-    let operations = await operationRepository.find({ user: id });
     let dayEarlier = moment().subtract(1, 'day');
+    let operations = await operationRepository.find({ user: id, createdAt: { $gte: dayEarlier } });
     let recentOperations = _.groupBy(
-      operations.filter(operation => moment(operation.createdAt).isAfter(dayEarlier)),
+      operations,
       'resource'
     );
 

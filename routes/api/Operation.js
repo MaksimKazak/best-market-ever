@@ -6,6 +6,6 @@ const controller = new OperationController();
 //GET operations collection
 router.get('/', auth.required, controller.index);
 router.get('/profit', auth.required, controller.profit);
-router.get('/recent-activities', auth.required, controller.recentActivities);
+router.get('/recent', auth.required, controller.recent);
 
 module.exports = router;
