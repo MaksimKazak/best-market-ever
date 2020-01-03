@@ -1,12 +1,53 @@
 const ProductRepository = require('../repositories/ProductRepository');
-const OperationRepository = require('../repositories/OperationRepository');
 const productRepository = new ProductRepository();
+const OperationRepository = require('../repositories/OperationRepository');
 const operationRepository = new OperationRepository();
+const UserRepository = require('../repositories/UserRepository');
+const userRepository = new UserRepository();
 const moment = require('moment');
 const _ = require('lodash');
 
 class OperationController {
   constructor() {}
+
+  async create(req, res) {
+    const { payload: { id }, body: { type, resource, quantity } } = req;
+
+    const [{ price }, user] = await Promise.all([
+      productRepository.findOne({ resource }),
+      userRepository.findById(id)
+    ]);
+    let amount = price * quantity;
+
+    let userResourceQuantity = user.resources[resource];
+    if (type === 'bought' && user.balance < amount) {
+      return res.status(400).send({ message: 'Insufficient funds.' });
+    } else if (type === 'sold' && quantity > userResourceQuantity) {
+      return res.status(400).send({ message: 'Not enough resources.' });
+    }
+
+    let operation = operationRepository.create({
+      user: user._id,
+      quantity,
+      amount,
+      resource,
+      type,
+      createdAt: new Date()
+    });
+    operationRepository.save(operation);
+    user.operations.push(operation._id);
+
+    if (userResourceQuantity) {
+      user.resources[resource] = type === 'bought' ? userResourceQuantity + quantity : userResourceQuantity - quantity;
+    } else {
+      user.resources[resource] = quantity;
+    }
+    user.markModified('resources');
+    user.balance = type === 'bought' ? user.balance - amount : user.balance + amount;
+    userRepository.save(user);
+
+    return res.status(202).send(operation);
+  }
 
   all(req, res) {
     return operationRepository.find()

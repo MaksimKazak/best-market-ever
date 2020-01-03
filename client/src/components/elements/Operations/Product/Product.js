@@ -8,7 +8,7 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
-import UserApi from '../../../../api/User';
+import OperationApi from '../../../../api/Operation';
 import { actions } from "../../../../store/user/userSlice";
 
 function Product({ product: { resource, price }, dispatch }) {
@@ -28,9 +28,9 @@ function Product({ product: { resource, price }, dispatch }) {
   };
 
   const buyResource = () => {
-    UserApi.buy({ resource, quantity })
-      .then(user => {
-        dispatch(actions.setUser(user));
+    OperationApi.create({ type: 'bought', resource, quantity })
+      .then(operation => {
+        console.log(operation);
         toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully purchased.`);
       })
       .catch(err => {

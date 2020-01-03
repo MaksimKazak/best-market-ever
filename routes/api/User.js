@@ -18,10 +18,4 @@ router.post('/logout', auth.required, controller.logout);
 //GET users collection
 router.get('/', auth.required, controller.index);
 
-//PUT buy product route
-router.put('/buy', auth.required, controller.buy);
-
-//PUT sell product route
-router.put('/sell', auth.required, controller.sell);
-
 module.exports = router;

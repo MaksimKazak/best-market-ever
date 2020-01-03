@@ -15,6 +15,11 @@ class Operation {
     let res = await axios.get( 'http://localhost:5000/api/operation/recent', { params }); //TODO: fix proxy
     return res.data || [];
   }
+
+  static async create(params) {
+    let res = await axios.post( '/api/operation', params);
+    return res.data || [];
+  }
 }
 
 export default Operation;

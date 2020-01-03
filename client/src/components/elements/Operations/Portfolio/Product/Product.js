@@ -5,7 +5,7 @@ import Slider from "@material-ui/core/Slider";
 import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import Typography from "@material-ui/core/Typography";
-import UserApi from "../../../../../api/User";
+import OperationApi from "../../../../../api/Operation";
 import {actions} from "../../../../../store/user/userSlice";
 import {toast} from "react-toastify";
 
@@ -28,9 +28,9 @@ function Product({ user, product: { resource, price }, dispatch }) {
   };
 
   const sellResource = () => {
-    UserApi.sell({ resource, quantity })
-      .then(user => {
-        dispatch(actions.setUser(user));
+    OperationApi.create({ type: 'sold', resource, quantity })
+      .then(operation => {
+        console.log(operation);
         toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully sold.`);
       })
       .catch(err => {
