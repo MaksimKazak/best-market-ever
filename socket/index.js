@@ -6,8 +6,15 @@ eventEmitter.run();
 io.on('connection', client => {
   client.on('subscribeToProductsPrices', () => {
     console.log('client is subscribing to products prices');
-    eventEmitter.addListener(products => {
+
+    const productsListener = products => {
       client.emit('productsUpdated', products);
+    };
+
+    eventEmitter.addListener(productsListener);
+
+    client.on('disconnect', () => {
+      eventEmitter.removeListener(productsListener);
     });
   });
 });

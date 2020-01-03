@@ -10,10 +10,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'typeface-roboto';
 import { subscribeToProductsPrices } from './socket';
-subscribeToProductsPrices((err, products) => {
-  console.log(products)
-});
+import { actions } from './store/products/productsSlice';
 toast.configure();
+
+subscribeToProductsPrices((err, products) => {
+  store.dispatch(actions.setProducts(products));
+});
 
 const theme = createMuiTheme({
   palette: {
