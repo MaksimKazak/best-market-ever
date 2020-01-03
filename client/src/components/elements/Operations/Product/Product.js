@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -8,10 +7,8 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Slider from '@material-ui/core/Slider';
-import OperationApi from '../../../../api/Operation';
-import { actions } from "../../../../store/user/userSlice";
 
-function Product({ product: { resource, price }, dispatch }) {
+function Product({ product: { resource, price }, createOperation }) {
   let [open, setOpen] = useState(false);
   let [quantity, setQuantity] = useState(1);
 
@@ -25,22 +22,6 @@ function Product({ product: { resource, price }, dispatch }) {
 
   const changeQuantityHandler = (event, val) => {
     setQuantity(val);
-  };
-
-  const buyResource = () => {
-    OperationApi.create({ type: 'bought', resource, quantity })
-      .then(operation => {
-        console.log(operation);
-        toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully purchased.`);
-      })
-      .catch(err => {
-        if (err.response) {
-          toast.error(err.response.data.message);
-        }
-      })
-      .finally(() => {
-        setOpen(false);
-      });
   };
 
   return (
@@ -78,7 +59,16 @@ function Product({ product: { resource, price }, dispatch }) {
               />
             </p>
             <p>{(quantity * price).toFixed(2) + ' $'}</p>
-            <Button color='primary' onClick={buyResource}>Buy</Button>
+            <Button color='primary'
+                    onClick={
+                      () => {
+                        createOperation('bought', resource, quantity);
+                        setOpen(false);
+                      }
+                    }
+            >
+              Buy
+            </Button>
           </div>
         </Fade>
       </Modal>

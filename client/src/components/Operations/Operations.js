@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 
 import Tabs from '@material-ui/core/Tabs';
@@ -13,21 +13,46 @@ import OperationsPanel from '../elements/Operations';
 import RecentActivities from "../elements/RecentActivities";
 import OperationApi from "../../api/Operation";
 import { toast } from "react-toastify";
+import { login as updateUser } from '../../store/user/middleware';
 
-function Operations() {
+function Operations({ dispatch }) {
   let [recentOperations, setRecentOperations] = useState(null);
   let [profit, setProfit] = useState(null);
-  useEffect(() => {
-    Promise.all([OperationApi.recent(), OperationApi.profit()])
+  let [isLoading, setIsLoading] = useState(true);
+
+  const fetchData = () => {
+    setIsLoading(true);
+    return Promise.all([OperationApi.recent(), OperationApi.profit()])
       .then(([recentOperations, profit]) => {
         setRecentOperations(recentOperations);
         setProfit(profit);
+        return dispatch(updateUser());
+      })
+      .catch(err => {
+        if (err.response) {
+          toast.error(err.response.data.message);
+        }
+      }).finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const createOperation = (type, resource, quantity) => {
+    return OperationApi.create({ type, resource, quantity })
+      .then(operation => {
+        toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully sold.`);
+        return fetchData();
       })
       .catch(err => {
         if (err.response) {
           toast.error(err.response.data.message);
         }
       });
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -35,7 +60,7 @@ function Operations() {
       <Route path='/operations'
              render={
                ({ location }) => (
-                 profit && recentOperations ?
+                 !isLoading ?
                    <Grid container spacing={6}>
                      <Grid item xs={12} md={8}>
                        <AppBar position="static">
@@ -47,7 +72,7 @@ function Operations() {
                        <Box className='box'>
                          <Switch>
                            <Route exact path='/operations'>
-                             <OperationsPanel profit={profit} />
+                             <OperationsPanel profit={profit} createOperation={createOperation} />
                            </Route>
                            <Route path='/operations/archive'>
                              <ArchivePanel />

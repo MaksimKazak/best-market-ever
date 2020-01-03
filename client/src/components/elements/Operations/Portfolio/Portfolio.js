@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Hidden from "@material-ui/core/Hidden";
 import Product from './Product';
 
-function Portfolio({ user, products }) {
+function Portfolio({ user, products, createOperation }) {
   return (
     <Grid className='space-top-large'>
       <Typography variant='h5' className='text-left'>Portfolio:</Typography>
@@ -18,7 +18,7 @@ function Portfolio({ user, products }) {
         <Grid item xs={12} sm>
           {
             products.map(product => (
-              <Product product={product} key={product.resource} />
+              <Product product={product} key={product.resource} createOperation={createOperation} />
             ))
           }
         </Grid>

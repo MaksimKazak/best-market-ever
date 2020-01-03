@@ -1,15 +1,12 @@
-import React, {Fragment, useState} from 'react'
+import React, { Fragment, useState } from 'react'
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import Slider from "@material-ui/core/Slider";
 import Button from "@material-ui/core/Button";
 import Modal from "@material-ui/core/Modal";
 import Typography from "@material-ui/core/Typography";
-import OperationApi from "../../../../../api/Operation";
-import {actions} from "../../../../../store/user/userSlice";
-import {toast} from "react-toastify";
 
-function Product({ user, product: { resource, price }, dispatch }) {
+function Product({ user, product: { resource, price }, createOperation }) {
   let [open, setOpen] = useState(false);
   let [quantity, setQuantity] = useState(user.resources[resource] || 0);
 
@@ -25,22 +22,6 @@ function Product({ user, product: { resource, price }, dispatch }) {
 
   const changeQuantityHandler = (event, val) => {
     setQuantity(val);
-  };
-
-  const sellResource = () => {
-    OperationApi.create({ type: 'sold', resource, quantity })
-      .then(operation => {
-        console.log(operation);
-        toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully sold.`);
-      })
-      .catch(err => {
-        if (err.response) {
-          toast.error(err.response.data.message);
-        }
-      })
-      .finally(() => {
-        setOpen(false);
-      });
   };
 
   return (
@@ -77,7 +58,16 @@ function Product({ user, product: { resource, price }, dispatch }) {
               />
             </p>
             <p>{(quantity * price).toFixed(2) + ' $'}</p>
-            <Button color='primary' onClick={sellResource}>Sell</Button>
+            <Button color='primary'
+                    onClick={
+                      () => {
+                        createOperation('sold', resource, quantity);
+                        setOpen(false);
+                      }
+                    }
+            >
+              Sell
+            </Button>
           </div>
         </Fade>
       </Modal>

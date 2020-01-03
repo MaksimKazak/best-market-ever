@@ -41,6 +41,7 @@ function Archive() {
   let [count, setCount] = useState(0);
 
   const fetchData = (newPage, newRowsPerPage) => {
+    setIsLoading(true);
     return OperationApi.list({
       page: newPage || newPage === 0 ? newPage : page,
       rowsPerPage: newRowsPerPage || rowsPerPage
@@ -51,16 +52,14 @@ function Archive() {
       if (err && err.response) {
         toast.error(err.response.data.message);
       }
+    }).finally(() => {
+      setIsLoading(false);
     });
   };
 
   useEffect(() => {
-    Promise.all([
-      fetchData(),
-      setIsLoading(true)
-    ]).then(() => {
-      setIsLoading(false);
-    });
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChangePage = async (event, newPage) => {
