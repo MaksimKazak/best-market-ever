@@ -8,7 +8,9 @@ import * as serviceWorker from './serviceWorker';
 import store from './store/store';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-require('typeface-roboto');
+import 'typeface-roboto';
+import { subscribeToTimer } from './socket';
+subscribeToTimer((err, timestamp) => {console.log(timestamp)});
 toast.configure();
 
 const theme = createMuiTheme({
