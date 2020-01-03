@@ -1,8 +1,8 @@
 import openSocket from 'socket.io-client';
 const socket = openSocket(process.env.REACT_APP_SOCKET_URL);
 
-function subscribeToTimer(cb) {
-  socket.on('timer', timestamp => cb(null, timestamp));
-  socket.emit('subscribeToTimer', 1000);
+function subscribeToProductsPrices(cb) {
+  socket.emit('subscribeToProductsPrices');
+  socket.on('productsUpdated', timestamp => cb(null, timestamp));
 }
-export { subscribeToTimer }
+export { subscribeToProductsPrices }

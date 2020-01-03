@@ -8,6 +8,10 @@ class ProductRepository {
   findOne(...args) {
     return Product.findOne(...args);
   }
+
+  save(product) {
+    return product.save();
+  }
 }
 
 module.exports = ProductRepository;

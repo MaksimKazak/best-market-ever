@@ -9,12 +9,14 @@ module.exports = class {
   run() {
     this.interval = setInterval(async () => {
       let products = await productRepository.all();
-      products.forEach(product => {
+      products = await Promise.all(products.map(product => {
         const diff = randomInRange(minDiff, maxDiff);
         if ((product.price += diff) > 1) {
-          product.save();
+          return productRepository.save(product);
         }
-      });
+        return Promise.resolve(product);
+      }));
+      this.listeners.forEach(listener => listener(products));
     }, 60000);
   }
 

@@ -1,12 +1,14 @@
 const io = require('socket.io')();
+const ProductsUpdateEventEmitter = require('./ProductsUpdateEventEmitter');
+const eventEmitter = new ProductsUpdateEventEmitter();
+eventEmitter.run();
 
 io.on('connection', client => {
   client.on('subscribeToProductsPrices', () => {
     console.log('client is subscribing to products prices');
-    setInterval(async () => {
-
-      client.emit('timer', new Date());
-    }, 60000);
+    eventEmitter.addListener(products => {
+      client.emit('productsUpdated', products);
+    });
   });
 });
 

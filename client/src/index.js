@@ -9,8 +9,10 @@ import store from './store/store';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'typeface-roboto';
-import { subscribeToTimer } from './socket';
-subscribeToTimer((err, timestamp) => {console.log(timestamp)});
+import { subscribeToProductsPrices } from './socket';
+subscribeToProductsPrices((err, products) => {
+  console.log(products)
+});
 toast.configure();
 
 const theme = createMuiTheme({
