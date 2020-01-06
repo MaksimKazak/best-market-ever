@@ -1,9 +1,15 @@
 const ProductRepository = require('../repositories/ProductRepository');
 const productRepository = new ProductRepository();
+const EventBus = require('../modules/EventBus');
 const [minDiff, maxDiff] = [-10, 10];
 
-module.exports = class {
-  listeners = [];
+const randomInRange = (min, max) => {
+  return +(Math.random() * (max - min) + min).toFixed(2);
+};
+
+class ProductsUpdateEventEmitter {
+  static EVENT_NAME = 'productsUpdate';
+  #eventBus = new EventBus();
   interval = null;
 
   run() {
@@ -18,7 +24,7 @@ module.exports = class {
         }
         return Promise.resolve(product);
       }));
-      this.listeners.forEach(listener => listener(products));
+      this.#eventBus.emit(ProductsUpdateEventEmitter.EVENT_NAME, products);
     }, 60000);
   }
 
@@ -27,17 +33,12 @@ module.exports = class {
   }
 
   addListener(listener) {
-    this.listeners.push(listener);
+    this.#eventBus.on(ProductsUpdateEventEmitter.EVENT_NAME, listener);
   }
 
   removeListener(listener) {
-    const index = this.listeners.indexOf(listener);
-    if (index > -1) {
-      this.listeners.splice(index, 1);
-    }
+    this.#eventBus.off(ProductsUpdateEventEmitter.EVENT_NAME, listener);
   }
-};
-
-function randomInRange (min, max) {
-  return +(Math.random() * (max - min) + min).toFixed(2);
 }
+
+module.exports = ProductsUpdateEventEmitter;
