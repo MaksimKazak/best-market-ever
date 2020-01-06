@@ -1,4 +1,8 @@
 import Operations from './Operations';
 import { connect } from 'react-redux';
 
-export default connect()(Operations);
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(mapStateToProps)(Operations);

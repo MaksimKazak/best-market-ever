@@ -12,7 +12,7 @@ function Main({ user }) {
         This application allows you to do one of the most important things - buy imaginary wood, iron and oil.
       </p>
       {
-        user ?
+        !user.isNotAuthenticated ?
           <p>
             It's time to buy some { products[Math.floor(Math.random()*products.length)] }!
           </p>

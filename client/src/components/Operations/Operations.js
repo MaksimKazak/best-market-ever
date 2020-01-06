@@ -15,26 +15,30 @@ import OperationApi from "../../api/Operation";
 import { toast } from "react-toastify";
 import { login as updateUser } from '../../store/user/middleware';
 
-function Operations({ dispatch }) {
+function Operations({ user: { isNotAuthenticated }, dispatch }) {
   let [recentOperations, setRecentOperations] = useState(null);
   let [profit, setProfit] = useState(null);
   let [isLoading, setIsLoading] = useState(true);
 
   const fetchData = () => {
     setIsLoading(true);
-    return Promise.all([OperationApi.recent(), OperationApi.profit()])
-      .then(([recentOperations, profit]) => {
-        setRecentOperations(recentOperations);
-        setProfit(profit);
-        return dispatch(updateUser());
-      })
-      .catch(err => {
-        if (err.response) {
-          toast.error(err.response.data.message);
-        }
-      }).finally(() => {
-        setIsLoading(false);
-      });
+    console.log(indexedDB);
+    if (!isNotAuthenticated) {
+      return Promise.all([OperationApi.recent(), OperationApi.profit()])
+        .then(([recentOperations, profit]) => {
+          setRecentOperations(recentOperations);
+          setProfit(profit);
+          return dispatch(updateUser());
+        })
+        .catch(err => {
+          if (err.response) {
+            toast.error(err.response.data.message);
+          }
+        }).finally(() => {
+          setIsLoading(false);
+        });
+    }
+    setIsLoading(false);
   };
 
   const createOperation = (type, resource, quantity) => {

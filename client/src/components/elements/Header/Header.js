@@ -1,13 +1,15 @@
-import React, { Fragment } from 'react';
+import React, {Fragment, useState} from 'react';
 import { logout } from '../../../store/user/middleware';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 function Header({ user, dispatch }) {
+  const history = useHistory();
 
   const handleLogout = async () => {
+    history.push('/');
     dispatch(logout());
   };
 
