@@ -11,7 +11,9 @@ module.exports = class {
       let products = await productRepository.all();
       products = await Promise.all(products.map(product => {
         const diff = randomInRange(minDiff, maxDiff);
-        if ((product.price += diff) > 1) {
+        const result = product.price + diff;
+        if (result > 1) {
+          product.price = result;
           return productRepository.save(product);
         }
         return Promise.resolve(product);
