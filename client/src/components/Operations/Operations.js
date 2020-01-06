@@ -16,10 +16,23 @@ import OperationApi from "../../api/Operation";
 import { toast } from "react-toastify";
 import { login as updateUser } from '../../store/user/middleware';
 
+const DB_NAME = 'demo';
+const DB_VERSION = 1;
+
 function Operations({ user: { isNotAuthenticated }, dispatch }) {
   let [recentOperations, setRecentOperations] = useState(null);
   let [profit, setProfit] = useState(null);
   let [isLoading, setIsLoading] = useState(true);
+  let [db, setDb] = useState(null);
+
+  const initDb = async () => {
+    const db = await openDB(DB_NAME, DB_VERSION, {
+      upgrade(db) {
+        db.createObjectStore('operations');
+      }
+    });
+    setDb(db);
+  };
 
   const fetchData = () => {
     setIsLoading(true);
@@ -55,11 +68,13 @@ function Operations({ user: { isNotAuthenticated }, dispatch }) {
           }
         });
     }
-    // TODO: Insert operation in idb for demo
   };
 
   useEffect(() => {
-    fetchData();
+    (async () => {
+      await initDb();
+      fetchData();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
