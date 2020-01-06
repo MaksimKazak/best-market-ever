@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 
-function Main({ user }) {
+function Main({ user: { isNotAuthenticated } }) {
   let products = ['wood', 'iron', 'oil'];
 
   return (
@@ -12,7 +12,7 @@ function Main({ user }) {
         This application allows you to do one of the most important things - buy imaginary wood, iron and oil.
       </p>
       {
-        !user.isNotAuthenticated ?
+        !isNotAuthenticated ?
           <p>
             It's time to buy some { products[Math.floor(Math.random()*products.length)] }!
           </p>

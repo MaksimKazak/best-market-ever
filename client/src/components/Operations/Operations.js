@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
+import { openDB } from "idb";
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -22,7 +23,6 @@ function Operations({ user: { isNotAuthenticated }, dispatch }) {
 
   const fetchData = () => {
     setIsLoading(true);
-    console.log(indexedDB);
     if (!isNotAuthenticated) {
       return Promise.all([OperationApi.recent(), OperationApi.profit()])
         .then(([recentOperations, profit]) => {
@@ -38,26 +38,34 @@ function Operations({ user: { isNotAuthenticated }, dispatch }) {
           setIsLoading(false);
         });
     }
+    // TODO: Get data from idb for demo
     setIsLoading(false);
   };
 
   const createOperation = (type, resource, quantity) => {
-    return OperationApi.create({ type, resource, quantity })
-      .then(operation => {
-        toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully sold.`);
-        return fetchData();
-      })
-      .catch(err => {
-        if (err.response) {
-          toast.error(err.response.data.message);
-        }
-      });
+    if (!isNotAuthenticated) {
+      return OperationApi.create({ type, resource, quantity })
+        .then(operation => {
+          toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully sold.`);
+          return fetchData();
+        })
+        .catch(err => {
+          if (err.response) {
+            toast.error(err.response.data.message);
+          }
+        });
+    }
+    // TODO: Insert operation in idb for demo
   };
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    // TODO: Save user to idb
+  });
 
   return (
     <div>

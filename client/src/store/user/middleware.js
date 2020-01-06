@@ -3,6 +3,7 @@ import axios from 'axios';
 import UserApi from '../../api/User';
 import { actions, initialUser } from './userSlice';
 import { toast } from "react-toastify";
+import { openDB } from "idb";
 
 const login = () => (dispatch) => {
   let token = Cookies.get('token');
@@ -14,6 +15,7 @@ const login = () => (dispatch) => {
         err => err.response && toast(err.response.data.message)
       );
   }
+  // TODO: Get user from idb
   return Promise.resolve();
 };
 
