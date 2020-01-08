@@ -66,11 +66,20 @@ function Operations({ products, user, dispatch }) {
         });
     }
     const product = _.find(products, { resource });
+    const userResourceQuantity = user.resources[resource];
+    let amount = +(product.price * quantity).toFixed(2);
+    if (type === 'bought' && user.balance < amount) {
+      toast.error('Insufficient funds.');
+      return;
+    } else if (type === 'sold' && quantity > userResourceQuantity) {
+      toast.error('Not enough resources.');
+      return;
+    }
     const operation = {
       type,
       resource,
       quantity,
-      amount: +(product.price * quantity).toFixed(2),
+      amount,
       createdAt: new Date()
     };
     db.add('operations', operation)
