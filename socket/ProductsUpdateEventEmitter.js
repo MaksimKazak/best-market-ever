@@ -17,7 +17,7 @@ class ProductsUpdateEventEmitter {
       let products = await productRepository.all();
       products = await Promise.all(products.map(product => {
         const diff = randomInRange(minDiff, maxDiff);
-        const result = product.price + diff;
+        const result = +(product.price + diff).toFixed(2);
         if (result > 1) {
           product.price = result;
           return productRepository.save(product);

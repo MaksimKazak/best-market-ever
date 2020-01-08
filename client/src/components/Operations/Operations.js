@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import { openDB } from "idb";
+import _ from 'lodash';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -19,7 +20,7 @@ import { login as updateUser } from '../../store/user/middleware';
 const DB_NAME = 'demo';
 const DB_VERSION = 1;
 
-function Operations({ user: { isNotAuthenticated }, dispatch }) {
+function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
   let [recentOperations, setRecentOperations] = useState(null);
   let [profit, setProfit] = useState(null);
   let [isLoading, setIsLoading] = useState(true);
@@ -28,7 +29,8 @@ function Operations({ user: { isNotAuthenticated }, dispatch }) {
   const initDb = async () => {
     const db = await openDB(DB_NAME, DB_VERSION, {
       upgrade(db) {
-        db.createObjectStore('operations');
+        const store = db.createObjectStore('operations');
+        store.index('createdAt');
       }
     });
     setDb(db);
@@ -68,6 +70,14 @@ function Operations({ user: { isNotAuthenticated }, dispatch }) {
           }
         });
     }
+    const product = _.find(products, { resource });
+    db.add('operations', {
+      type,
+      resource,
+      quantity,
+      amount: +(product.price * quantity).toFixed(2),
+      createdAt: new Date()
+    });
   };
 
   useEffect(() => {

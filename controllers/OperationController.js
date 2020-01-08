@@ -17,7 +17,7 @@ class OperationController {
       productRepository.findOne({ resource }),
       userRepository.findById(id)
     ]);
-    let amount = price * quantity;
+    let amount = +(price * quantity).toFixed(2);
 
     let userResourceQuantity = user.resources[resource];
     if (type === 'bought' && user.balance < amount) {
