@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import { toast } from "react-toastify";
+import dbPromise from '../../../idb';
 
 import Table from '../Table/Table';
 import OperationApi from "../../../api/Operation";
-import {toast} from "react-toastify";
+
 const columns = [
   {
     id: 'id',
@@ -33,34 +35,44 @@ const columns = [
 const initialPage = 0;
 const initialRowsPerPage = 10;
 
-function Archive() {
+function Archive({ user: { isNotAuthenticated } }) {
   let [page, setPage] = useState(initialPage);
   let [rowsPerPage, setRowsPerPage] = useState(initialRowsPerPage);
   let [isLoading, setIsLoading] = useState(true);
   let [operations, setOperations] = useState([]);
   let [count, setCount] = useState(0);
+  let [db, setDb] = useState(null);
 
   const fetchData = (newPage, newRowsPerPage) => {
     setIsLoading(true);
-    return OperationApi.list({
-      page: newPage || newPage === 0 ? newPage : page,
-      rowsPerPage: newRowsPerPage || rowsPerPage
-    }).then(data => {
-      setOperations(data.operations);
-      setCount(data.count);
-    }).catch(err => {
-      if (err && err.response) {
-        toast.error(err.response.data.message);
-      }
-    }).finally(() => {
-      setIsLoading(false);
-    });
+    if (!isNotAuthenticated) {
+      return OperationApi.list({
+        page: newPage || newPage === 0 ? newPage : page,
+        rowsPerPage: newRowsPerPage || rowsPerPage
+      }).then(data => {
+        setOperations(data.operations);
+        setCount(data.count);
+      }).catch(err => {
+        if (err && err.response) {
+          toast.error(err.response.data.message);
+        }
+      }).finally(() => {
+        setIsLoading(false);
+      });
+    }
+    // TODO: paginating from idb
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchData();
+    dbPromise.then(db => setDb(db))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    db && fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db]);
 
   const handleChangePage = async (event, newPage) => {
     setPage(newPage);
