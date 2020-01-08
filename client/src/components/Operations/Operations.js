@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
-import { openDB } from "idb";
+import dbPromise from '../../idb';
 import _ from 'lodash';
 
 import Tabs from '@material-ui/core/Tabs';
@@ -17,9 +17,6 @@ import OperationApi from "../../api/Operation";
 import { toast } from "react-toastify";
 import { login as updateUser } from '../../store/user/middleware';
 
-const DB_NAME = 'demo';
-const DB_VERSION = 1;
-
 function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
   let [recentOperations, setRecentOperations] = useState(null);
   let [profit, setProfit] = useState(null);
@@ -27,12 +24,7 @@ function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
   let [db, setDb] = useState(null);
 
   const initDb = async () => {
-    const db = await openDB(DB_NAME, DB_VERSION, {
-      upgrade(db) {
-        const store = db.createObjectStore('operations');
-        store.index('createdAt');
-      }
-    });
+    const db = await dbPromise;
     setDb(db);
   };
 
