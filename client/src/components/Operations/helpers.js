@@ -1,6 +1,8 @@
 import moment from 'moment';
 import _ from 'lodash';
 
+// TODO: move to modules
+
 const computeRecent = (operations) => {
   let dayEarlier = moment().subtract(1, 'day');
   let recentOperations = _.groupBy(

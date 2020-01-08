@@ -3,6 +3,8 @@ import { Route, Switch, Link } from 'react-router-dom';
 import dbPromise from '../../idb';
 import _ from 'lodash';
 import { computeRecent, computeProfit } from './helpers';
+import { toast } from "react-toastify";
+import { actions } from '../../store/user/userSlice';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -10,15 +12,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import CircularProgress from "@material-ui/core/CircularProgress";
-
 import ArchivePanel from '../elements/Archive';
 import OperationsPanel from '../elements/Operations';
 import RecentActivities from "../elements/RecentActivities";
 import OperationApi from "../../api/Operation";
-import { toast } from "react-toastify";
-import { login as updateUser } from '../../store/user/middleware';
 
-function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
+function Operations({ products, user, dispatch }) {
+  let { isNotAuthenticated } = user;
   let [recentOperations, setRecentOperations] = useState(null);
   let [profit, setProfit] = useState(null);
   let [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,6 @@ function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
         .then(([recentOperations, profit]) => {
           setRecentOperations(recentOperations);
           setProfit(profit);
-          return dispatch(updateUser());
         })
         .catch(err => {
           if (err.response) {
@@ -58,7 +57,7 @@ function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
       return OperationApi.create({ type, resource, quantity })
         .then(operation => {
           toast.success(`${quantity} item${quantity > 1 ? 's': ''} of ${resource.toLowerCase()} successfully sold.`);
-          return fetchData();
+          updateState(operation);
         })
         .catch(err => {
           if (err.response) {
@@ -67,13 +66,52 @@ function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
         });
     }
     const product = _.find(products, { resource });
-    db.add('operations', {
+    const operation = {
       type,
       resource,
       quantity,
       amount: +(product.price * quantity).toFixed(2),
       createdAt: new Date()
-    });
+    };
+    db.add('operations', operation)
+      .then(() => updateState(operation));
+  };
+
+  const updateState = ({ type, amount, quantity, resource }) => {
+    const diff = type === 'bought' ? -amount : amount;
+    updateUser(diff, resource, quantity, type);
+    updateProfit(diff, resource);
+    updateRecentOperations(resource, type, quantity);
+  };
+
+  const updateProfit = (diff, resource) => {
+    let profitCopy = _.cloneDeep(profit);
+    profitCopy.general += diff;
+    profitCopy[resource] += diff;
+    setProfit(profitCopy);
+  };
+
+  const updateRecentOperations = (resource, type, quantity) => {
+    let recentOperationsCopy = _.cloneDeep(recentOperations);
+    recentOperationsCopy[resource] = recentOperationsCopy[resource] || {};
+    const recentResourceOperationQuantity = recentOperationsCopy[resource][type];
+    recentOperationsCopy[resource][type] = recentResourceOperationQuantity ? recentResourceOperationQuantity + quantity : quantity;
+    setRecentOperations(recentOperationsCopy);
+  };
+
+  const updateUser = (diff, resource, quantity, type) => {
+    let userCopy = _.cloneDeep(user);
+    userCopy.balance += diff;
+    const userResourceQuantity = userCopy.resources[resource];
+    if (userResourceQuantity) {
+      userCopy.resources[resource] = type === 'bought' ? userResourceQuantity + quantity : userResourceQuantity - quantity;
+    } else {
+      userCopy.resources[resource] = quantity;
+    }
+    dispatch(actions.setUser(userCopy));
+    if (isNotAuthenticated) {
+      db.put('user', userCopy, 'user');
+    }
   };
 
   useEffect(() => {
@@ -82,9 +120,7 @@ function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
   }, []);
 
   useEffect(() => {
-    if (db) {
-      fetchData();
-    }
+    db && fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db]);
 
