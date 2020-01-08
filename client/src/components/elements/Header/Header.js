@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, { Fragment } from 'react';
 import { logout } from '../../../store/user/middleware';
 
 import Typography from '@material-ui/core/Typography';

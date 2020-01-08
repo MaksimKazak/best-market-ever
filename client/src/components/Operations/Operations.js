@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, Link } from 'react-router-dom';
 import dbPromise from '../../idb';
 import _ from 'lodash';
+import { computeRecent, computeProfit } from './helpers';
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -23,9 +24,8 @@ function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
   let [isLoading, setIsLoading] = useState(true);
   let [db, setDb] = useState(null);
 
-  const initDb = async () => {
-    const db = await dbPromise;
-    setDb(db);
+  const initDb = () => {
+    dbPromise.then(db => setDb(db));
   };
 
   const fetchData = () => {
@@ -45,8 +45,12 @@ function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
           setIsLoading(false);
         });
     }
-    // TODO: Get data from idb for demo
-    setIsLoading(false);
+    db.getAll('operations')
+      .then(operations => {
+        setRecentOperations(computeRecent(operations));
+        setProfit(computeProfit(operations, products));
+        setIsLoading(false);
+      });
   };
 
   const createOperation = (type, resource, quantity) => {
@@ -73,12 +77,17 @@ function Operations({ products, user: { isNotAuthenticated }, dispatch }) {
   };
 
   useEffect(() => {
-    (async () => {
-      await initDb();
-      fetchData();
-    })();
+    initDb();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (db) {
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [db]);
+
 
   useEffect(() => {
     // TODO: Save user to idb
