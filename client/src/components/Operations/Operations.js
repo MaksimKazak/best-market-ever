@@ -80,7 +80,7 @@ function Operations({ products, user, dispatch }) {
       resource,
       quantity,
       amount,
-      createdAt: new Date()
+      createdAt: new Date().toISOString()
     };
     db.add('operations', operation)
       .then(() => updateState(operation));
@@ -132,11 +132,6 @@ function Operations({ products, user, dispatch }) {
     db && fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db]);
-
-
-  useEffect(() => {
-    // TODO: Save user to idb
-  });
 
   return (
     <div>

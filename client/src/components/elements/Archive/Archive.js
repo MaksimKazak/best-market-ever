@@ -44,11 +44,13 @@ function Archive({ user: { isNotAuthenticated } }) {
   let [db, setDb] = useState(null);
 
   const fetchData = (newPage, newRowsPerPage) => {
+    page = newPage || newPage === 0 ? newPage : page;
+    rowsPerPage = newRowsPerPage || rowsPerPage;
     setIsLoading(true);
     if (!isNotAuthenticated) {
       return OperationApi.list({
-        page: newPage || newPage === 0 ? newPage : page,
-        rowsPerPage: newRowsPerPage || rowsPerPage
+        page,
+        rowsPerPage
       }).then(data => {
         setOperations(data.operations);
         setCount(data.count);
@@ -60,7 +62,23 @@ function Archive({ user: { isNotAuthenticated } }) {
         setIsLoading(false);
       });
     }
-    // TODO: paginating from idb
+    return getDataFromIdb();
+  };
+
+  const getDataFromIdb = async () => {
+    const transaction = db.transaction('operations', 'readonly');
+    const store = transaction.objectStore('operations');
+    let cursor = await store.openCursor();
+    let newOperations = [];
+    while (cursor) {
+      if (cursor.key > page * rowsPerPage && cursor.key <= page * rowsPerPage + rowsPerPage) {
+        newOperations.push(cursor.value);
+      }
+      cursor = await cursor.continue();
+    }
+    let newCount = await store.count();
+    setCount(newCount);
+    setOperations(newOperations);
     setIsLoading(false);
   };
 
