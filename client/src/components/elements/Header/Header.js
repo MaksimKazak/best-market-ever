@@ -1,16 +1,36 @@
-import React, { Fragment } from 'react';
+import React, {Fragment, useState} from 'react';
 import { logout } from '../../../store/user/middleware';
 
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { NavLink, useHistory } from 'react-router-dom';
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import Slider from "@material-ui/core/Slider";
+import Modal from "@material-ui/core/Modal";
+import IconButton from "@material-ui/core/IconButton";
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 function Header({ user, dispatch }) {
+  let [open, setOpen] = useState(false);
+  let [quantity, setQuantity] = useState(1);
   const history = useHistory();
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const handleLogout = async () => {
     history.push('/');
     dispatch(logout());
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const changeQuantityHandler = (event, val) => {
+    setQuantity(val);
   };
 
   let profileBlock;
@@ -18,6 +38,9 @@ function Header({ user, dispatch }) {
     profileBlock = (
       <div className='header-profile'>
         {user.username + ' ' + user.balance.toFixed(2) + ' $'}
+        <IconButton onClick={handleOpen} title='Replenish balance' color='primary'>
+          <AddCircleIcon />
+        </IconButton>
         <Button color='primary' className='space-left' onClick={handleLogout}>Sign out</Button>
       </div>
     );
@@ -55,6 +78,40 @@ function Header({ user, dispatch }) {
         </nav>
       </div>
       { profileBlock }
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className='modal'
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className='modal-box'>
+            <h2 id="transition-modal-title">Choose quantity</h2>
+            <p id="transition-modal-description">
+              <Slider
+                defaultValue={1}
+                aria-labelledby="transition-modal-title"
+                min={1}
+                max={10000}
+                step={1}
+                valueLabelDisplay="auto"
+                value={quantity}
+                onChange={changeQuantityHandler}
+              />
+            </p>
+            <p>{quantity.toFixed(2) + ' $'}</p>
+            <Button color='primary'>
+              Replenish
+            </Button>
+          </div>
+        </Fade>
+      </Modal>
     </header>
   );
 }
