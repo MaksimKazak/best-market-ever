@@ -25,6 +25,11 @@ class User {
     let res = await axios.get( '/api/user', { params });
     return res.data || [];
   }
+
+  static async update(data) {
+    let res = await axios.put( '/api/user', data);
+    return res.data || [];
+  }
 }
 
 export default User;

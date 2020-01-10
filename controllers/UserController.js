@@ -26,6 +26,15 @@ class UserController {
     }
   }
 
+  async update(req, res) {
+    let { body, payload: { id } } = req;
+    let user = await userRepository.findOne({ _id: id });
+    user = Object.assign(user, body);
+
+    return userRepository.save(user)
+      .then(() => res.send(user.toJSON()))
+  }
+
   current(req, res) {
     const { payload: { id } } = req;
 

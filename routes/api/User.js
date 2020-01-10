@@ -18,4 +18,7 @@ router.post('/logout', auth.required, controller.logout);
 //GET users collection
 router.get('/', auth.required, controller.index);
 
+//PUT update user
+router.put('/', auth.required, controller.update);
+
 module.exports = router;
